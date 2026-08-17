@@ -1,31 +1,31 @@
 ---
+import Navigation from "../components/nav.astro";
+import "../styles/global.css";
+
 interface Props {
   title: string;
+  description?: string;
 }
 
-import NavigationBar from "../components/nav.astro"
-
-const { title } = Astro.props;
+const { title, description = "丼猫の作品や日記をまとめた個人サイトです。" } = Astro.props;
+const pageTitle = title ? `${title} | 丼猫のウェブサイト` : "丼猫のウェブサイト";
 ---
 
 <!doctype html>
 <html lang="ja">
-<head>
+  <head>
     <meta charset="UTF-8" />
-    <title>{title}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <title>{pageTitle}</title>
   </head>
-
   <body>
-    <NavigationBar />
-
-    <main>
-      <slot />
-    </main>
+    <a class="skip-link" href="#main-content">本文へ移動</a>
+    <div class="site-shell">
+      <Navigation />
+      <main id="main-content" class="site-content"><slot /></main>
+    </div>
   </body>
 </html>
-
-<style>
-    body{
-        display:flex;
-    }
-</style>

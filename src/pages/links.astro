@@ -1,0 +1,28 @@
+---
+import Layout from "../layouts/layout.astro";
+import Panel from "../components/Panel.astro";
+
+const links = [
+  ["/about/", "私について", "私について書かれているよ！！", false],
+  ["/works/", "作品", "作った作品について書かれてるよ！！", false],
+  ["/diary/", "日記だよ", "思ったことについて適当に書くよ！！", false],
+  ["/links/", "リンク", "リンクのことについていっぱい書かれてるよ！！", false],
+  ["https://github.com/donneko", "GitHub", "作ったプログラムをアップロードするところだよ！！", true],
+  ["https://twitter.com/donneko_", "ツイッター", "つぶやいたりするところ", true],
+] as const;
+---
+
+<Layout title="リンクたち" description="丼猫のサイト内ページと外部プロフィールへのリンク集。">
+  <div class="page">
+    <h1 class="page-title">私のリンク</h1>
+    <Panel title="自分のリンク">
+      <table class="data-table">
+        <thead><tr><th>ページ</th><th>説明</th></tr></thead>
+        <tbody>{links.map(([href, label, description, external]) => <tr>
+          <td><a href={href} class:list={{ "external-link": external }} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>{label}</a></td>
+          <td>{description}</td>
+        </tr>)}</tbody>
+      </table>
+    </Panel>
+  </div>
+</Layout>
