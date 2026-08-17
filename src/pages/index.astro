@@ -1,11 +1,60 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/layout.astro";
+import WindowTable from "../components/window-table.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="">
+    <div  class="page">
+        <h1 style="text-align: center;">私のホームページ</h1>
+
+        <marquee direction="right" style="background-color: #6a6aff;">
+            <font color="#ff0011">アクセス</font>
+            <font color="#ffffff">ありがとうございます</font>
+        </marquee>
+        <br>
+        <br>
+
+        <table border="1" border-collapse="collapse" style="width: 100%;background-color: #fff;">
+            <tr>
+                <td style="width: 50%;">
+                    <p style="white-space: pre;">
+　　　%%%%%%%%%%%%%%　
+　　%%　　　　　　　　　　　%%
+　%%　　　ーー　　ーー　　　　%%
+　%　　　　　　　　　　　　　　%%
+　%　　　■　　　　■　　　　　%%
+　%%　　　　_____　　　　　　　%%
+　　%%　　　　　　　　　　　%%
+　　　%%%%%%%%%%%%%%　
+                    </p>
+                </td>
+                <td style="width: 50%;">
+                    <p style="width: 90%;">最近のニュース</p>
+                    <iframe style="width: 100%;box-sizing: border-box;" src="./news.htm"></iframe>
+                </td>
+            </tr>
+        </table>
+
+        <br>
+        <br>
+        <hr>
+        <br>
+        <br>
+
+        <WindowTable title="サイトマップ"; tableTitles={["ページ","説明"]};  tableContents={[
+            [<a href="./about.htm" target="main">私について</a>,"私について書かれているよ！！"],
+            [<a href="./works.htm" target="main">作品</a>,"作った作品について書かれてるよ！！"],
+            [<a href="./diary.htm" target="main">日記だよ</a>,"思ったとについて適当に書くよ！！"],
+            [<a href="./links.htm" target="main">リンク</a>,"リンクのことについていっぱい書かれてるよ！！"],
+        ]};/>
+    </div>
 </Layout>
+
+<style>
+.page{
+    background-image: url(../assets/tana.svg);
+    background-size: 15px;
+
+}
+</style>
