@@ -3,8 +3,8 @@
 I don't understand myself.
 
 ### Skills & Tools
-[![My Skills languages](https://skillicons.dev/icons?i=html,css,js,ts)](https://skillicons.dev)
-[![My Skills](https://skillicons.dev/icons?i=nodejs,npm,git,vitest)](https://skillicons.dev)
+[![My Skills languages](https://skillicons.dev/icons?i=html,css,js,ts)](https://skillicons.dev)  
+[![My Skills](https://skillicons.dev/icons?i=nodejs,npm,git,vitest)](https://skillicons.dev)  
 [![Tools](https://skillicons.dev/icons?i=ai,ps,blender,vscode)](https://skillicons.dev)
 
 
