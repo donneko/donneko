@@ -1,71 +1,182 @@
 ---
 import Layout from "../layouts/layout.astro";
 import Panel from "../components/Panel.astro";
+import { siteScreenshot } from "../helper/site-screenshot.js";
+import { fixScreenshotPath } from "../helper/fix-screenshot-path.js";
+import ALink, { type Link } from "../components/link.astro";
 
-const projects = [
-  { name: "ウィンドウシステム", href: "https://donneko.github.io/window-system-demo/" },
-  { name: "数学ウェブアプリ", href: "https://donneko.github.io/math-problems/" },
-  { name: "昔のこのドメインのサイト", href: "https://necco.main.jp/donneko/site/site-works/old-site/index.html" },
+interface Project {
+    title: string;
+    siteScreenshot: boolean;
+    src: string;
+    alt: string;
+    description: string;
+    links?: Link[];
+}
+
+const projects: Project[] = [
+    {
+        title: "ウィンドウシステム",
+        siteScreenshot: true,
+        src: "https://donneko.github.io/window-system-demo/",
+        alt: "ウィンドウシステムのウェブサイトの画像",
+        description:
+            "16:9の素材はいっぱいあるのに、21:9はないのはなぜなぜ？？？ なら作っちゃえ!! ワイドモニターで配信ができるようになったぜ！！ 小声：配信なんてしないけど。",
+        links: [
+            {
+                href: "https://donneko.github.io/window-system-demo/",
+                label: "ウェブサイトを開く",
+                external: true,
+            },
+            {
+                href: "https://donneko.github.com/donneko/window-system",
+                label: "GitHub でリポジトリをみる",
+                external: true,
+            },
+        ],
+    },
+    {
+        title: "数学ウェブアプリ",
+        siteScreenshot: true,
+        src: "https://donneko.github.io/math-problems/",
+        alt: "数学ウェブアプリのウェブサイトの画像",
+        description:
+            "昔学内のコンテストに出すために作ったサイト。今見たらJSのコードがベタ書きとかで恥ずかしい(｡>﹏<｡)",
+        links: [
+            {
+                href: "https://donneko.github.io/math-problems/",
+                label: "ウェブサイトを開く",
+                external: true,
+            },
+            {
+                href: "https://github.com/donneko/math-problems/",
+                label: "GitHub でリポジトリをみる",
+                external: true,
+            },
+        ],
+    },
+    {
+        title: "昔のこのドメインのサイトデザイン案",
+        siteScreenshot: false,
+        src: "/site/site-works/img/DONNEKO.png",
+        alt: "昔のこのドメインのサイトのデザイン画像",
+        description: "デザインは良かったんだけど、実現する気力がなかった(泣)SF系にハマっていたとき",
+    },
+    {
+        title: "ツイッターヘッダー画像1",
+        siteScreenshot: false,
+        src: "/site/site-works/img/DONNEKO.png",
+        alt: "丼猫のTwitterヘッダー画像",
+        description:
+            "ツイッターでヘッダー画像がないな…って思ったときに、なら作っちゃえ！！☆ ってイラストレーターで簡単に作ったもの。ペットボトルのラベルをリスペクトしてオマージュしております。",
+    },
+    {
+        title: "YouTubeヘッダー画像",
+        siteScreenshot: false,
+        src: "/site/site-works/img/DONNEKO2.png",
+        alt: "丼猫のYouTubeヘッダー画像",
+        description: "『画像1』をYouTube用のヘッダーに対応させたやつ。",
+    },
+    {
+        title: "画像おにぎり",
+        siteScreenshot: false,
+        src: "/site/site-works/img/おにぎり.png",
+        alt: "ペンタブで描いたおにぎりのイラスト",
+        description:
+            "リサイクル屋さんで小さなペンタブを安く購入したから、動作確認がてらおにぎりを描いてみたよ。おにぎりの画像の透明度を落としてトレスしてるよーー。",
+    },
+    {
+        title: "配信用の21:9の枠",
+        siteScreenshot: false,
+        src: "/site/site-works/img/LIve.png",
+        alt: "21対9の配信用フレーム素材",
+        description:
+            "16:9の素材はいっぱいあるのに、21:9はないのはなぜなぜ？？？ なら作っちゃえ!! ワイドモニターで配信ができるようになったぜ！！ 小声：配信なんてしないけど。",
+    },
 ];
 
-const images = [
-  {
-    title: "ツイッターヘッダー画像1",
-    src: "/site/site-works/img/DONNEKO.png",
-    alt: "丼猫のTwitterヘッダー画像",
-    description: "ツイッターでヘッダー画像がないな…って思ったときに、なら作っちゃえ！！☆ ってイラストレーターで簡単に作ったもの。ペットボトルのラベルをリスペクトしてオマージュしております。",
-  },
-  {
-    title: "YouTubeヘッダー画像",
-    src: "/site/site-works/img/DONNEKO2.png",
-    alt: "丼猫のYouTubeヘッダー画像",
-    description: "『画像1』をYouTube用のヘッダーに対応させたやつ。",
-  },
-  {
-    title: "画像おにぎり",
-    src: "/site/site-works/img/おにぎり.png",
-    alt: "ペンタブで描いたおにぎりのイラスト",
-    description: "リサイクル屋さんで小さなペンタブを安く購入したから、動作確認がてらおにぎりを描いてみたよ。おにぎりの画像の透明度を落としてトレスしてるよーー。",
-  },
-  {
-    title: "配信用の21:9の枠",
-    src: "/site/site-works/img/LIve.png",
-    alt: "21対9の配信用フレーム素材",
-    description: "16:9の素材はいっぱいあるのに、21:9はないのはなぜなぜ？？？ なら作っちゃえ!! ワイドモニターで配信ができるようになったぜ！！ 小声：配信なんてしないけど。",
-  },
-];
+// const screenshots = projects.map(({ siteScreenshot, src }) => {
+//     if (siteScreenshot) return siteScreenshot(src, `public/${fixScreenshotPath(src)}`);
+// });
+// await Promise.all(screenshots);
 ---
 
-<Layout title="作品について" description="丼猫が作ったウェブアプリや画像作品。">
-  <div class="page">
-    <h1 class="page-title">作ったものたち</h1>
+<Layout title="作品について" description="ウェブアプリや画像作品。">
+    <div class="page">
+        <h1 class="page-title">作ったものたち</h1>
 
-    <Panel title="ウェブ作品">
-      <ol class="project-list">
-        {projects.map(({ name, href }) => <li><a class="external-link" href={href} target="_blank" rel="noreferrer">{name}</a></li>)}
-      </ol>
-    </Panel>
-
-    <div class="gallery">
-      {images.map(({ title, src, alt, description }) => <article class="work-card">
-        <h2>{title}</h2>
-        <a href={src} target="_blank" aria-label={`${title}を原寸で表示`}>
-          <img src={src} alt={alt} loading="lazy" />
-        </a>
-        <h3>なんで作ったの？</h3>
-        <p>{description}</p>
-      </article>)}
+        <div class="gallery">
+            {
+                projects.map(({ title, siteScreenshot, src, alt, description, links = [] }) => (
+                    <Panel title={title} tag="article">
+                        <div class="work-card">
+                            <a
+                                href={src}
+                                target="_blank"
+                                aria-label={`${title}${siteScreenshot ? "のサイトへ移動" : "を原寸で表示"}`}
+                            >
+                                <img
+                                    src={siteScreenshot ? `/${fixScreenshotPath(src)}` : src}
+                                    alt={alt}
+                                    loading="lazy"
+                                />
+                            </a>
+                            <div class="descriptions">
+                                <h3>なんで作ったの？</h3>
+                                <p>{description}</p>
+                                {links.length ? <h3>リンク</h3>
+                                  <div class="links">
+                                    {links.map(({ href, label, external }) => (
+                                    <ALink href={href} label={label} external={external} />
+                                ))}</div> : ""}
+                            </div>
+                        </div>
+                    </Panel>
+                ))
+            }
+        </div>
     </div>
-  </div>
 </Layout>
 
 <style>
-  .project-list { display: grid; gap: 12px; margin: 4px 0; padding-left: 30px; }
-  .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
-  .work-card { overflow: hidden; border: 1px solid #111; background: #fff; box-shadow: 3px 3px 0 rgb(0 0 0 / 20%); }
-  .work-card h2 { margin: 0; padding: 6px 10px; background: linear-gradient(#141e6b, #2233bb 10%, #141e6b 90%); color: #fff; font-size: 1rem; text-align: center; }
-  .work-card img { display: block; width: 100%; aspect-ratio: 16 / 8; border-bottom: 1px solid #111; background: #eee; object-fit: contain; }
-  .work-card h3 { margin: 16px 16px 8px; font-size: 1.05rem; }
-  .work-card p { margin: 0 16px 20px; line-height: 1.7; }
-  @media (max-width: 800px) { .gallery { grid-template-columns: 1fr; } }
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px;
+    }
+    .work-card {
+        container-type: inline-size;
+    }
+    .work-card img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16/10;
+        background: #eee;
+        object-fit: contain;
+    }
+    .work-card .descriptions {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        margin-top: auto;
+    }
+    .work-card .descriptions h3 {
+        color: #023000;
+        margin: 0.5em 0;
+        font-size: 1.05rem;
+    }
+    .work-card .descriptions p {
+        line-height: 1.2;
+        margin: 0.5em 0;
+    }
+    .work-card .descriptions .links {
+        display: flex;
+        gap: 1em;
+        flex-wrap: wrap;
+    }
+    @media (max-width: 800px) {
+        .gallery {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>

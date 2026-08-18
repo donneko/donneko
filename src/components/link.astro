@@ -1,0 +1,22 @@
+---
+import { imageConfig } from "astro:assets";
+
+interface Props {
+    href: string;
+    label: string;
+    external: boolean;
+}
+
+export interface Link extends Props {}
+
+const { href, label, external } = Astro.props;
+---
+
+<a
+    href={href}
+    class:list={{ "external-link": external }}
+    target={external ? "_blank" : undefined}
+    rel={external ? "noreferrer" : undefined}
+>
+    {label}
+</a>

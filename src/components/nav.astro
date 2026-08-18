@@ -1,24 +1,92 @@
 ---
 const pathname = Astro.url.pathname;
 const links = [
-  { href: "/", label: "トップページ", color: "#ffff11" },
-  { href: "/about/", label: "私について", color: "#ff11ff" },
-  { href: "/works/", label: "作品について", color: "#11ffff" },
-  { href: "/diary/", label: "いろんな日記", color: "#ff1111" },
-  { href: "/links/", label: "リンクたち", color: "#11ff11" },
+    { href: "/", label: "トップページ", color: "#ffff11" },
+    { href: "/about/", label: "私について", color: "#ff11ff" },
+    { href: "/works/", label: "作品について", color: "#11ffff" },
+    { href: "/diary/", label: "いろんな日記", color: "#ff1111" },
+    { href: "/links/", label: "リンクたち", color: "#11ff11" },
 ];
 ---
 
 <nav class="navigation" aria-label="メインメニュー">
-  <a class="site-name" href="/">DONNEKO'S ROOM</a>
-  <ul>
-    {links.map(({ href, label, color }) => {
-      const current = href === "/" ? pathname === href : pathname.startsWith(href);
-      return <li>
-        <span class="marker" style={`--marker-color: ${color}`} aria-hidden="true">■</span>
-        <a href={href} aria-current={current ? "page" : undefined}>{label}</a>
-      </li>;
-    })}
-  </ul>
-  <p class="navigation-note">Welcome to my homepage!</p>
+    <p class="navigation-note">Welcome to my homepage!</p>
+    <ul>
+        {
+            links.map(({ href, label, color }) => {
+                const current = href === "/" ? pathname === href : pathname.startsWith(href);
+                return (
+                    <li>
+                        <span class="marker" style={`--marker-color: ${color}`} aria-hidden="true">
+                            ■
+                        </span>
+                        <a href={href} aria-current={current ? "page" : undefined}>
+                            {label}
+                        </a>
+                    </li>
+                );
+            })
+        }
+    </ul>
 </nav>
+
+<style>
+    .navigation {
+        width: clamp(150px, 20vw, 200px);
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        align-self: start;
+        min-height: 100vh;
+        padding: 28px 16px;
+        border-right: 5px ridge #777;
+        background: #afcfff;
+    }
+    .navigation ul {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .navigation li {
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        align-items: baseline;
+        gap: 6px;
+    }
+    .navigation .marker {
+        color: var(--marker-color);
+        text-shadow: 1px 1px #333;
+    }
+    .navigation a[aria-current="page"] {
+        font-weight: bold;
+    }
+    .navigation-note {
+        margin-bottom: 20px;
+        color: #334;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    @media (max-width: 700px) {
+        .navigation {
+            position: relative;
+            width: 100%;
+            min-height: 5em;
+            border-right: none;
+            border-bottom: 5px ridge #777;
+            padding: 10px 15px;
+        }
+        .navigation ul {
+            flex-direction: row;
+            flex-wrap: wrap;
+            row-gap: 0.7em;
+        }
+        .navigation-note {
+            margin-top: 0.5em;
+            margin-bottom: 1em;
+        }
+    }
+</style>

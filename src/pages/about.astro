@@ -3,64 +3,117 @@ import Layout from "../layouts/layout.astro";
 import Panel from "../components/Panel.astro";
 
 const profile = [
-  ["名前", "丼猫"],
-  ["誕生日", "8月6日"],
-  ["性別", "男"],
-  ["資格とか", "ITパスポート"],
+    ["名前", "丼猫"],
+    ["誕生日", "2008年08月06日"],
+    ["性別", "男"],
+    ["資格とか", "◎基本情報技術者　◎ITパスポート　◎Illustratorクリエーター試験スタンダード"],
+    ["所属", "学生"],
 ];
 
 const languages = [
-  ["HTML", "学校で必ずやらないといけない課題があったんで、やってみたらできるようになったやつ。サイトとかを作れるようになった"],
-  ["CSS", "HTMLのサイトに色とかつけるやつ。これが意外とめんどくさい。CSS学ぶ前にデザイン学ばないとだった…"],
-  ["JavaScript", "CSSでアニメーションとかしてたけど、だんだん不可能になってきたから始めてみた。とても面白く楽しい。めんどくさい作業の自動化に使ってる"],
-  ["TypeScript", "JavaScriptをやっていると、だんだん昔作ってた関数の引数がわからなくなってくる。そんなときに出会ったやつ。"],
-  ["Lua", "Stormworksでマイコン作るときに使ったやつ。閉じるのがendなのが面白かった。"],
-  ["C言語", "C#とOS自作をしたいと考えて、ならC言語始めるか？で始めたやつ。全然できない（泣）"],
+    [
+        "HTML",
+        "学校で必ずやらないといけない課題があったんで、やってみたらできるようになったやつ。サイトとかを作れるようになった",
+    ],
+    [
+        "CSS",
+        "HTMLのサイトに色とかつけるやつ。これが意外とめんどくさい。CSS学ぶ前にデザイン学ばないとだった…",
+    ],
+    [
+        "JavaScript",
+        "CSSでアニメーションとかしてたけど、だんだん不可能になってきたから始めてみた。とても面白く楽しい。めんどくさい作業の自動化に使ってる",
+    ],
+    [
+        "TypeScript",
+        "JavaScriptをやっていると、だんだん昔作ってた関数の引数がわからなくなってくる。そんなときに出会ったやつ。",
+    ],
+    ["Lua", "Stormworksでマイコン作るときに使ったやつ。閉じるのがendなのが面白かった。"],
+    ["C言語", "C#とOS自作をしたいと考えて、ならC言語始めるか？で始めたやつ。全然できない（泣）"],
 ];
 
 const history = [
-  ["2024年8月", "ホームセンター", "不採用"],
-  ["2024年8月", "リサイクルショップ", "不採用"],
-  ["2024年9月", "牛丼屋", "不採用"],
-  ["2024年9月", "お肉屋", "不採用"],
-  ["2024年10月", "コンビニ", "採用"],
-  ["2025年3月", "コンテスト - 3D動画", "四位"],
-  ["2025年9月", "コンテスト - WEBサイト", "参加賞"],
-  ["2026年3月", "コンテスト - 動画", "一位"],
+    ["2024年8月", "ホームセンター", "不採用"],
+    ["2024年8月", "リサイクルショップ", "不採用"],
+    ["2024年9月", "牛丼屋", "不採用"],
+    ["2024年9月", "お肉屋", "不採用"],
+    ["2024年10月", "コンビニ", "採用"],
+    ["2025年3月", "コンテスト - 3D動画", "四位"],
+    ["2025年9月", "コンテスト - WEBサイト", "参加賞"],
+    ["2026年3月", "コンテスト - 動画", "一位"],
 ];
 ---
 
 <Layout title="私について" description="丼猫のプロフィール、使える言語、これまでの履歴。">
-  <div class="page">
-    <h1 class="page-title">私について</h1>
+    <div class="page">
+        <h1 class="page-title">私について</h1>
 
-    <Panel title="私について">
-      <table class="data-table">
-        <thead><tr><th>タイトル</th><th>説明</th></tr></thead>
-        <tbody>
-          {profile.map(([title, value]) => <tr><td>{title}</td><td>{value}</td></tr>)}
-          <tr><td>お仕事</td><td>仕事なんてしてないよ！！<br />ほぼ無職だね！！<br /><small>（本当はコンビニバイトだよ？）</small></td></tr>
-        </tbody>
-      </table>
-    </Panel>
+        <div class="panels">
+            <Panel title="私について">
+                <table class="data-table">
+                    <thead><tr><th>タイトル</th><th>説明</th></tr></thead>
+                    <tbody>
+                        {
+                            profile.map(([title, value]) => (
+                                <tr>
+                                    <>
+                                        <td>{title}</td>
+                                        <td>{value}</td>
+                                    </>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            </Panel>
 
-    <Panel title="使える言語">
-      <table class="data-table">
-        <thead><tr><th>タイトル</th><th>説明</th></tr></thead>
-        <tbody>{languages.map(([title, value]) => <tr><td>{title}</td><td>{value}</td></tr>)}</tbody>
-      </table>
-    </Panel>
+            <Panel title="使える言語">
+                <table class="data-table">
+                    <thead><tr><th>タイトル</th><th>説明</th></tr></thead>
+                    <tbody
+                        >{
+                            languages.map(([title, value]) => (
+                                <tr>
+                                    <>
+                                        <td>{title}</td>
+                                        <td>{value}</td>
+                                    </>
+                                </tr>
+                            ))
+                        }</tbody
+                    >
+                </table>
+            </Panel>
 
-    <Panel title="履歴">
-      <table class="data-table">
-        <thead><tr><th>日にち</th><th>内容</th><th>結果</th></tr></thead>
-        <tbody>{history.map((row) => <tr>{row.map((value) => <td>{value}</td>)}</tr>)}</tbody>
-      </table>
-    </Panel>
-  </div>
+            <Panel title="履歴">
+                <table class="data-table">
+                    <thead><tr><th>日にち</th><th>内容</th><th>結果</th></tr></thead>
+                    <tbody
+                        >{
+                            history.map((row) => (
+                                <tr>
+                                    {row.map((value) => (
+                                        <td>{value}</td>
+                                    ))}
+                                </tr>
+                            ))
+                        }</tbody
+                    >
+                </table>
+            </Panel>
+        </div>
+    </div>
 </Layout>
 
 <style>
-  small { color: #333; }
-  td:first-child { white-space: nowrap; }
+    .panels {
+        display: flex;
+        flex-direction: column;
+        gap: 3em;
+    }
+    small {
+        color: #333;
+    }
+    td:first-child {
+        white-space: nowrap;
+    }
 </style>

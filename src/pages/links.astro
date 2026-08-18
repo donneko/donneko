@@ -1,28 +1,95 @@
 ---
 import Layout from "../layouts/layout.astro";
 import Panel from "../components/Panel.astro";
+import ALink, { type Link } from "../components/link.astro";
 
-const links = [
-  ["/about/", "私について", "私について書かれているよ！！", false],
-  ["/works/", "作品", "作った作品について書かれてるよ！！", false],
-  ["/diary/", "日記だよ", "思ったことについて適当に書くよ！！", false],
-  ["/links/", "リンク", "リンクのことについていっぱい書かれてるよ！！", false],
-  ["https://github.com/donneko", "GitHub", "作ったプログラムをアップロードするところだよ！！", true],
-  ["https://twitter.com/donneko_", "ツイッター", "つぶやいたりするところ", true],
-] as const;
+interface LinkTable extends Link {
+    description: string;
+}
+
+const links: LinkTable[] = [
+    {
+        href: "/about/",
+        label: "私について",
+        external: false,
+        description: "私について書かれているよ！！",
+    },
+    {
+        href: "/works/",
+        label: "作品",
+        external: false,
+        description: "作った作品について書かれてるよ！！",
+    },
+    {
+        href: "/diary/",
+        label: "日記だよ",
+        external: false,
+        description: "思ったことについて適当に書くよ！！",
+    },
+    {
+        href: "/links/",
+        label: "リンク",
+        external: false,
+        description: "リンクのことについていっぱい書かれてるよ！！",
+    },
+    {
+        href: "https://github.com/donneko",
+        label: "GitHub",
+        external: true,
+        description: "作ったプログラムをアップロードするところだよ！！",
+    },
+    {
+        href: "https://www.npmjs.com/~donneko",
+        label: "npm",
+        external: true,
+        description: "作ったパッケージを公開するために使ってる",
+    },
+    {
+        href: "https://zenn.dev/donneko",
+        label: "Zenn",
+        external: true,
+        description: "気がついた事とか、誰かに発信したいときに使う",
+    },
+    {
+        href: "https://twitter.com/donneko_",
+        label: "ツイッター",
+        external: true,
+        description: "つぶやいたりするところ",
+    },
+    {
+        href: "https://misskey.io/@donneko",
+        label: "misskey",
+        external: true,
+        description: "ツイッターとは別の楽しさがある",
+    },
+    {
+        href: "https://www.youtube.com/@丼猫",
+        label: "Youtube",
+        external: true,
+        description: "むかし趣味で色々投稿していた",
+    },
+];
 ---
 
-<Layout title="リンクたち" description="丼猫のサイト内ページと外部プロフィールへのリンク集。">
-  <div class="page">
-    <h1 class="page-title">私のリンク</h1>
-    <Panel title="自分のリンク">
-      <table class="data-table">
-        <thead><tr><th>ページ</th><th>説明</th></tr></thead>
-        <tbody>{links.map(([href, label, description, external]) => <tr>
-          <td><a href={href} class:list={{ "external-link": external }} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>{label}</a></td>
-          <td>{description}</td>
-        </tr>)}</tbody>
-      </table>
-    </Panel>
-  </div>
+<Layout title="リンクたち" description="サイト内ページと外部プロフィールへのリンク集。">
+    <div class="page">
+        <h1 class="page-title">私のリンク</h1>
+        <Panel title="自分のリンク">
+            <table class="data-table">
+                <thead><tr><th>ページ</th><th>説明</th></tr></thead>
+                <tbody
+                    >{
+                        links.map(({ href, label, description, external }) => (
+                            <tr>
+                                <td>
+                                    <ALink href={href} label={label} external={external} />
+                                </td>
+                                <td>{description}</td>
+                            </tr>
+                        ))
+                    }</tbody
+                >
+            </table>
+        </Panel>
+    </div>
 </Layout>

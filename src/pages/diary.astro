@@ -3,19 +3,32 @@ import Layout from "../layouts/layout.astro";
 import Panel from "../components/Panel.astro";
 ---
 
-<Layout title="いろんな日記" description="丼猫が思ったことを適当に書く日記。">
-  <div class="page">
-    <h1 class="page-title">日記だよ</h1>
-    <Panel title="2026年4月6日">
-      <article>
-        <p>日記って面白そう、って思いつつ日記を書くよ！！</p>
-        <p>そういえば、最近の思い出は、基本情報技術者試験を受けたいんだけど、難しいってことだね！！</p>
-        <p>だってさ、数学って難しくない？</p>
-      </article>
-    </Panel>
-  </div>
+<Layout title="いろんな日記" description="思ったことを適当に書く日記。">
+    <div class="page">
+        <h1 class="page-title">日記だよ</h1>
+        <Panel title="日記について">
+            <article>
+                <p>日記はツイッターに移行しました。</p>
+                <a
+                    class="external-link"
+                    href="https://twitter.com/donneko_"
+                    target="_blank"
+                    rel="noreferrer">ツイッターリンク</a
+                >
+            </article>
+        </Panel>
+    </div>
 </Layout>
 
 <style>
-  article { padding: 4px 12px; line-height: 1.8; }
+    article {
+        padding: 5px 10px;
+    }
+    p {
+        margin: 0.5em 0;
+    }
+    a {
+        display: block;
+        margin-bottom: 0.3em;
+    }
 </style>

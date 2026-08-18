@@ -3,61 +3,147 @@ import Layout from "../layouts/layout.astro";
 import Panel from "../components/Panel.astro";
 
 const news = [
-  ["2025年04月06日", "資格についてと言語についてを追加しました!!"],
-  ["2025年04月06日", "履歴を追加しました!!"],
-  ["2025年04月06日", "日記を追加しました!!"],
-  ["2025年04月03日", "サイトを公開しました☆"],
+    ["2026年08月18日", "☆サイトをリニューアルしました☆"],
+    ["2026年04月06日", "資格についてと言語についてを追加しました!!"],
+    ["2026年04月06日", "履歴を追加しました!!"],
+    ["2026年04月06日", "日記を追加しました!!"],
+    ["2026年04月03日", "サイトを公開しました☆"],
 ];
 ---
 
-<Layout title="">
-  <div class="page">
-    <h1 class="page-title">私のホームページ</h1>
-    <div class="welcome" aria-label="アクセスありがとうございます"><span>アクセス</span>ありがとうございます</div>
+<Layout title="ウェブサイト">
+    <div class="page">
+        <h1 class="page-title">私のホームページ</h1>
+        <div class="welcome" aria-label="アクセスありがとうございます">
+            <div class="welcome-content"><span>アクセス</span>ありがとうございます</div>
+        </div>
 
-    <div class="intro-grid">
-      <pre class="ascii-art" aria-label="顔のアスキーアート">
-　　　%%%%%%%%%%%%%%　
-　　%%　　　　　　　　　　　%%
-　%%　　　ーー　　ーー　　　　%%
-　%　　　　　　　　　　　　　　%%
-　%　　　■　　　　■　　　　　%%
-　%%　　　　_____　　　　　　　%%
-　　%%　　　　　　　　　　　%%
-　　　%%%%%%%%%%%%%%</pre>
-      <Panel title="最近のニュース">
-        <ul class="news-list">
-          {news.map(([date, text]) => <li><time>{date}</time><span>{text}</span></li>)}
-        </ul>
-      </Panel>
+        <div class="intro-grid">
+            <pre
+                class="ascii-art"
+                aria-label="顔のアスキーアート">
+　　　％％％％％％％％％％％％％
+　　％％　　　　　　　　　　　％％
+　％％　　　ーー　　ーー　　　　％％
+　％　　　　　　　　　　　　　　％％
+　％　　　■　　　　■　　　　　％％
+　％％　　　　_____　　　　　　　％％
+　　％％　　　　　　　　　　　％％
+　　　％％％％％％％％％％％％％</pre>
+            <Panel title="最近のニュース">
+                <ul class="news-list">
+                    {
+                        news.map(([date, text]) => (
+                            <li>
+                                <time>{date}</time>
+                                <span>{text}</span>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </Panel>
+        </div>
+
+        <hr />
+        <Panel title="サイトマップ">
+            <table class="data-table">
+                <thead><tr><th>ページ</th><th>説明</th></tr></thead>
+                <tbody>
+                    <tr
+                        ><td><a href="/about/">私について</a></td><td
+                            >私について書かれているよ！！</td
+                        ></tr
+                    >
+                    <tr
+                        ><td><a href="/works/">作品</a></td><td
+                            >作った作品について書かれてるよ！！</td
+                        ></tr
+                    >
+                    <tr
+                        ><td><a href="/diary/">日記だよ</a></td><td
+                            >思ったことについて適当に書くよ！！</td
+                        ></tr
+                    >
+                    <tr
+                        ><td><a href="/links/">リンク</a></td><td
+                            >リンクのことについていっぱい書かれてるよ！！</td
+                        ></tr
+                    >
+                </tbody>
+            </table>
+        </Panel>
     </div>
-
-    <hr />
-    <Panel title="サイトマップ">
-      <table class="data-table">
-        <thead><tr><th>ページ</th><th>説明</th></tr></thead>
-        <tbody>
-          <tr><td><a href="/about/">私について</a></td><td>私について書かれているよ！！</td></tr>
-          <tr><td><a href="/works/">作品</a></td><td>作った作品について書かれてるよ！！</td></tr>
-          <tr><td><a href="/diary/">日記だよ</a></td><td>思ったことについて適当に書くよ！！</td></tr>
-          <tr><td><a href="/links/">リンク</a></td><td>リンクのことについていっぱい書かれてるよ！！</td></tr>
-        </tbody>
-      </table>
-    </Panel>
-  </div>
 </Layout>
 
 <style>
-  .welcome { overflow: hidden; margin-bottom: 28px; padding: 3px 0; background: #6a6aff; color: #fff; white-space: nowrap; }
-  .welcome span { display: inline-block; margin-right: .5em; color: #ff0011; animation: travel 9s linear infinite alternate; }
-  .intro-grid { display: grid; grid-template-columns: minmax(300px, 1fr) minmax(320px, 1fr); gap: 18px; margin-bottom: 40px; }
-  .intro-grid :global(.panel) { width: 100%; margin: 0; }
-  .ascii-art { display: grid; place-content: center; overflow: auto; min-height: 230px; margin: 0; border: 1px solid #111; background: #fff; font-family: monospace; font-size: clamp(10px, 1.5vw, 15px); line-height: 1.45; }
-  .news-list { display: grid; gap: 10px; margin: 0; padding: 4px 4px 4px 24px; font-size: .85rem; }
-  .news-list li::marker { content: "○  "; }
-  .news-list time { display: block; font-weight: bold; }
-  hr { margin: 0 0 40px; }
-  @keyframes travel { from { transform: translateX(0); } to { transform: translateX(min(45vw, 500px)); } }
-  @media (prefers-reduced-motion: reduce) { .welcome span { animation: none; } }
-  @media (max-width: 780px) { .intro-grid { grid-template-columns: 1fr; } }
+    .welcome {
+        overflow: hidden;
+        margin-bottom: 28px;
+        padding: 3px 0;
+        background: #6a6aff;
+        color: #fff;
+        white-space: nowrap;
+        container-type: inline-size;
+    }
+    .welcome-content {
+        display: inline-block;
+        animation: travel 10s linear infinite;
+    }
+    .welcome-content span {
+        color: #ff0011;
+    }
+    .intro-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-bottom: 40px;
+    }
+    .intro-grid :global(.panel) {
+        width: 100%;
+        margin: 0;
+    }
+    .ascii-art {
+        display: grid;
+        place-content: center;
+        overflow: auto;
+        min-height: 230px;
+        margin: 0;
+        border: 1px solid #111;
+        background: #fff;
+        font-family: monospace;
+        font-size: clamp(10px, 1.5vw, 15px);
+        line-height: 1.45;
+    }
+    .news-list {
+        display: grid;
+        gap: 10px;
+        margin: 0;
+        padding: 4px 4px 4px 24px;
+        font-size: 0.85rem;
+    }
+    .news-list li::marker {
+        content: "○  ";
+    }
+    .news-list time {
+        color: #023000;
+
+        display: block;
+        font-weight: bold;
+    }
+    hr {
+        margin: 0 0 40px;
+    }
+    @keyframes travel {
+        from {
+            transform: translateX(-100%);
+        }
+        to {
+            transform: translateX(calc(100cqw + 100%));
+        }
+    }
+    @media (max-width: 780px) {
+        .intro-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
