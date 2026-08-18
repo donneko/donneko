@@ -7,7 +7,7 @@ export const projects: Project[] = [
     {
         title: "tyoi-server",
         category: "npm",
-        media: [],
+        media: [image("/works/tyoi-server/image.png", "tyoi-serverの起動画像")],
         description:
             "小さなAPIサーバーや静的ファイルサーバーを簡単に立ち上げるために作っているNode.js / TypeScript製のサーバーフレームワーク。CLI、WebSocket、API Registry、ログ、セキュリティ機能などを実装している。npmにも公開していて、現在も開発中。",
         links: [
@@ -26,8 +26,9 @@ export const projects: Project[] = [
     {
         title: "tyoi-logger",
         category: "npm",
-        media: [],
-        description: "Node.js / TypeScript 向けに作っているロガー。必要な場所で気軽にログを残せるようにしたくて作成中。",
+        media: [image("/works/tyoi-logger/image.png", "tyoi-loggerの起動画像")],
+        description:
+            "Node.js / TypeScript 向けに作っているロガー。必要な場所で気軽にログを残せるようにしたくて作成中。",
         links: [
             {
                 href: "https://www.npmjs.com/package/@donneko/tyoi-logger",
@@ -44,8 +45,9 @@ export const projects: Project[] = [
     {
         title: "tyoi-cli",
         category: "npm",
-        media: [],
-        description: "Node.js / TypeScript 向けに作っている CLI ツール。コマンドラインから使いやすい仕組みを試したくて作成中。",
+        media: [image("/works/tyoi-cli/image.png", "tyoi-cliの起動画像")],
+        description:
+            "Node.js / TypeScript 向けに作っている CLI ツール。コマンドラインから使いやすい仕組みを試したくて作成中。",
         links: [
             {
                 href: "https://www.npmjs.com/package/@donneko/tyoi-cli",
@@ -62,8 +64,12 @@ export const projects: Project[] = [
     {
         title: "site-map",
         category: "npm",
-        media: [],
-        description: "サイトマップを扱うために作っている npm パッケージ。必要な情報をまとめて扱いやすくしたくて作成中。",
+        media: [
+            image("/works/site-map/image.png", "site-mapのロゴ画像"),
+            image("/works/site-map/sc.png", "site-mapの出力のJSON画像"),
+        ],
+        description:
+            "サイトマップを扱うために作っている npm パッケージ。必要な情報をまとめて扱いやすくしたくて作成中。",
         links: [
             {
                 href: "https://www.npmjs.com/package/@donneko/site-map",
@@ -81,7 +87,8 @@ export const projects: Project[] = [
         title: "RΛLINE 3D Visual Portfolio",
         category: "web",
         media: [image("/works/r4line/logos.jpg", "RΛLINE 3D Visual Portfolio のロゴ素材")],
-        description: "3D 表現を使った架空のビジュアルポートフォリオ。ロゴなどの素材もあわせて制作した。",
+        description:
+            "3D 表現を使った架空のビジュアルポートフォリオ。ロゴなどの素材もあわせて制作した。",
         links: [
             {
                 href: "http://r4line.donneko.net/",
@@ -167,7 +174,8 @@ export const projects: Project[] = [
             image("/works/blender/Gz4zeF6bAAEEyu7.jpg", "Blender 作品の画面"),
             image("/works/blender/Gz56Llsa8AAUtyi.jpg", "Blender 作品の画面"),
         ],
-        description: "Blender で作ったモデルや動きの試作をまとめたもの。いろいろ触りながら表現を試していた。",
+        description:
+            "Blender で作ったモデルや動きの試作をまとめたもの。いろいろ触りながら表現を試していた。",
     },
     {
         title: "バス時刻表",
@@ -183,7 +191,7 @@ export const projects: Project[] = [
     {
         title: "C言語 数当てゲーム",
         category: "program",
-        media: [image("/works/c%20language/HEkbYE5bkAI2P3d.jpg", "C言語で作った数当てゲームの画面")],
+        media: [image("/works/c-language/HEkbYE5bkAI2P3d.jpg", "C言語で作った数当てゲームの画面")],
         description: "C言語で作った、難易度を選んで遊べる数当てゲーム。",
     },
     {
@@ -283,7 +291,12 @@ export const projects: Project[] = [
     {
         title: "おにぎりイラスト",
         category: "illustration",
-        media: [image("/works/other/%E3%81%8A%E3%81%AB%E3%81%8E%E3%82%8A.png", "ペンタブで描いたおにぎりのイラスト")],
+        media: [
+            image(
+                "/works/other/%E3%81%8A%E3%81%AB%E3%81%8E%E3%82%8A.png",
+                "ペンタブで描いたおにぎりのイラスト"
+            ),
+        ],
         description: "小さなペンタブの動作確認がてら描いたおにぎり。",
     },
     {
