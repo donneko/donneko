@@ -1,31 +1,74 @@
 ---
 import Layout from "../layouts/layout.astro";
 import Panel from "../components/Panel.astro";
-import { fixScreenshotPath } from "../helper/fix-screenshot-path.js";
 import ALink from "../components/link.astro";
 import { projects } from "../data/projects.ts";
+
+const categoryLabels: Record<string, string> = {
+    web: "Webサイト",
+    npm: "npmパッケージ",
+    video: "動画",
+    design: "デザイン",
+    illustration: "イラスト",
+};
+const categories = [...new Set(projects.map(({ category }) => category))];
 ---
 
 <Layout title="作品について" description="ウェブアプリや画像作品。">
     <div class="page">
         <h1 class="page-title">作ったものたち</h1>
 
+        <div class="filters" aria-label="作品の絞り込み">
+            <button type="button" class="filter-button is-active" data-filter="all" aria-pressed="true">
+                すべて
+            </button>
+            {categories.map((category) => (
+                <button type="button" class="filter-button" data-filter={category} aria-pressed="false">
+                    {categoryLabels[category] ?? category}
+                </button>
+            ))}
+        </div>
+
         <div class="gallery">
             {
-                projects.map(({ title, hasScreenshot, src, alt, description, links = [] }) => (
-                    <Panel title={title} tag="article">
+                projects.map(({ title, category, src, alt, description, links = [] }) => (
+                    <Panel title={title} tag="article" data-category={category}>
                         <div class="work-card">
-                            <a
-                                href={src}
-                                target="_blank"
-                                aria-label={`${title}${hasScreenshot ? "のサイトへ移動" : "を原寸で表示"}`}
-                            >
-                                <img
-                                    src={hasScreenshot ? `/${fixScreenshotPath(src)}` : src}
-                                    alt={alt}
-                                    loading="lazy"
-                                />
-                            </a>
+                            {
+                                src.length ? (
+                                    <div class="slider" data-slider>
+                                        <div class="slides">
+                                            {src.map((image, index) => (
+                                                <a
+                                                    class:list={{ slide: true, "is-active": index === 0 }}
+                                                    href={image}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    data-slide={index}
+                                                    aria-hidden={index === 0 ? undefined : "true"}
+                                                >
+                                                    <img src={image} alt={`${alt} (${index + 1}/${src.length})`} loading="lazy" />
+                                                </a>
+                                            ))}
+                                        </div>
+                                        {src.length > 1 ? (
+                                            <div class="slider-controls">
+                                                <button type="button" class="slider-button" data-previous aria-label="前の画像">
+                                                    ‹
+                                                </button>
+                                                <span class="slider-counter" aria-live="polite">1 / {src.length}</span>
+                                                <button type="button" class="slider-button" data-next aria-label="次の画像">
+                                                    ›
+                                                </button>
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                ) : (
+                                    <div class="no-image" role="img" aria-label={`${title}の画像はありません`}>
+                                        画像なし
+                                    </div>
+                                )
+                            }
                             <div class="descriptions">
                                 <h3>なんで作ったの？</h3>
                                 <p>{description}</p>
@@ -43,14 +86,93 @@ import { projects } from "../data/projects.ts";
     </div>
 </Layout>
 
+<script>
+    const filterButtons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+    const cards = document.querySelectorAll<HTMLElement>("[data-category]");
+
+    filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            const filter = button.dataset.filter;
+            filterButtons.forEach((item) => {
+                const active = item === button;
+                item.classList.toggle("is-active", active);
+                item.setAttribute("aria-pressed", String(active));
+            });
+            cards.forEach((card) => {
+                card.hidden = filter !== "all" && card.dataset.category !== filter;
+            });
+        });
+    });
+
+    document.querySelectorAll<HTMLElement>("[data-slider]").forEach((slider) => {
+        const slides = [...slider.querySelectorAll<HTMLElement>("[data-slide]")];
+        const counter = slider.querySelector<HTMLElement>(".slider-counter");
+        let current = 0;
+
+        const showSlide = (index: number) => {
+            current = (index + slides.length) % slides.length;
+            slides.forEach((slide, slideIndex) => {
+                const active = slideIndex === current;
+                slide.classList.toggle("is-active", active);
+                slide.setAttribute("aria-hidden", String(!active));
+            });
+            if (counter) counter.textContent = `${current + 1} / ${slides.length}`;
+        };
+
+        slider.querySelector<HTMLButtonElement>("[data-previous]")?.addEventListener("click", () => {
+            showSlide(current - 1);
+        });
+        slider.querySelector<HTMLButtonElement>("[data-next]")?.addEventListener("click", () => {
+            showSlide(current + 1);
+        });
+    });
+</script>
+
 <style>
     .gallery {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 24px;
     }
+    .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 24px;
+    }
+    .filter-button,
+    .slider-button {
+        border: 2px outset #ddd;
+        background: #eee;
+        color: #111;
+        cursor: pointer;
+        font: inherit;
+    }
+    .filter-button {
+        padding: 5px 12px;
+    }
+    .filter-button.is-active {
+        border-style: inset;
+        background: #2233bb;
+        color: #fff;
+    }
+    .panel[hidden] {
+        display: none;
+    }
     .work-card {
         container-type: inline-size;
+    }
+    .slider {
+        background: #eee;
+    }
+    .slides {
+        position: relative;
+    }
+    .slide {
+        display: none;
+    }
+    .slide.is-active {
+        display: block;
     }
     .work-card img {
         display: block;
@@ -58,6 +180,30 @@ import { projects } from "../data/projects.ts";
         aspect-ratio: 16/10;
         background: #eee;
         object-fit: contain;
+    }
+    .slider-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        padding: 6px;
+    }
+    .slider-button {
+        width: 32px;
+        height: 28px;
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+    .slider-counter {
+        min-width: 48px;
+        text-align: center;
+    }
+    .no-image {
+        display: grid;
+        place-items: center;
+        aspect-ratio: 16 / 10;
+        background: #eee;
+        color: #555;
     }
     .work-card .descriptions {
         width: 100%;

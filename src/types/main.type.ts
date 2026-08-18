@@ -10,8 +10,8 @@ export interface LinkTable extends Link {
 
 export interface Project {
     title: string;
-    hasScreenshot: boolean;
-    src: string;
+    category: string;
+    src: string[];
     alt: string;
     description: string;
     links?: Link[];
