@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "capture": "tsx ./src/build/capture-screenshots.ts",
-    "build": "npm run capture && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
