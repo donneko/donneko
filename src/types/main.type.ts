@@ -1,4 +1,8 @@
-import type { Link } from "../components/link.astro";
+export interface Link {
+    href: string;
+    label: string;
+    external: boolean;
+}
 
 export interface LinkTable extends Link {
     description: string;

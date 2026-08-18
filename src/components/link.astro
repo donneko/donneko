@@ -1,11 +1,7 @@
 ---
-interface Props {
-    href: string;
-    label: string;
-    external: boolean;
-}
+import type { Link } from "../types/main.type.ts";
 
-export interface Link extends Props {}
+interface Props extends Link {}
 
 const { href, label, external } = Astro.props;
 ---
