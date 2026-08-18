@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
+    site: 'https://donneko.github.io',
     redirects: {
         "/site/main.htm": "/",
         "/site/about.htm": "/about/",
