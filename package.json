@@ -7,14 +7,12 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "capture": "tsx ./src/build/capture-screenshots.ts",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.2",
-    "playwright": "^1.62.1"
+    "astro": "^7.2.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -24,7 +22,6 @@
     "globals": "^17.7.0",
     "prettier": "^3.9.5",
     "prettier-plugin-astro": "^0.14.1",
-    "tsx": "^4.22.4",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.64.0"
   }
