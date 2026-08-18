@@ -10,6 +10,10 @@ const categoryLabels: Record<string, string> = {
     video: "動画",
     design: "デザイン",
     illustration: "イラスト",
+    program: "プログラム",
+    "3d": "3D",
+    hardware: "電子工作",
+    game: "ゲーム",
 };
 const categories = [...new Set(projects.map(({ category }) => category))];
 ---
@@ -31,32 +35,45 @@ const categories = [...new Set(projects.map(({ category }) => category))];
 
         <div class="gallery">
             {
-                projects.map(({ title, category, src, alt, description, links = [] }) => (
+                projects.map(({ title, category, media, description, links = [] }) => (
                     <Panel title={title} tag="article" data-category={category}>
                         <div class="work-card">
                             {
-                                src.length ? (
+                                media.length ? (
                                     <div class="slider" data-slider>
                                         <div class="slides">
-                                            {src.map((image, index) => (
-                                                <a
-                                                    class:list={{ slide: true, "is-active": index === 0 }}
-                                                    href={image}
-                                                    target="_blank"
-                                                    rel="noreferrer"
-                                                    data-slide={index}
-                                                    aria-hidden={index === 0 ? undefined : "true"}
-                                                >
-                                                    <img src={image} alt={`${alt} (${index + 1}/${src.length})`} loading="lazy" />
-                                                </a>
+                                            {media.map((item, index) => (
+                                                item.type === "image" ? (
+                                                    <a
+                                                        class:list={{ slide: true, "is-active": index === 0 }}
+                                                        href={item.src}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        data-slide={index}
+                                                        aria-hidden={index === 0 ? undefined : "true"}
+                                                    >
+                                                        <img src={item.src} alt={item.alt} loading="lazy" />
+                                                    </a>
+                                                ) : (
+                                                    <div
+                                                        class:list={{ slide: true, "is-active": index === 0 }}
+                                                        data-slide={index}
+                                                        aria-hidden={index === 0 ? undefined : "true"}
+                                                    >
+                                                        <video controls playsinline preload="metadata" aria-label={item.alt}>
+                                                            <source src={item.src} type="video/mp4" />
+                                                            お使いのブラウザは動画の再生に対応していません。
+                                                        </video>
+                                                    </div>
+                                                )
                                             ))}
                                         </div>
-                                        {src.length > 1 ? (
+                                        {media.length > 1 ? (
                                             <div class="slider-controls">
                                                 <button type="button" class="slider-button" data-previous aria-label="前の画像">
                                                     ‹
                                                 </button>
-                                                <span class="slider-counter" aria-live="polite">1 / {src.length}</span>
+                                                <span class="slider-counter" aria-live="polite">1 / {media.length}</span>
                                                 <button type="button" class="slider-button" data-next aria-label="次の画像">
                                                     ›
                                                 </button>
@@ -179,6 +196,13 @@ const categories = [...new Set(projects.map(({ category }) => category))];
         width: 100%;
         aspect-ratio: 16/10;
         background: #eee;
+        object-fit: contain;
+    }
+    .work-card video {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16/10;
+        background: #111;
         object-fit: contain;
     }
     .slider-controls {
