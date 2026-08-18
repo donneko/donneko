@@ -7,8 +7,9 @@ import ALink from "../components/link.astro";
 import { projects } from "../data/projects.ts";
 
 
-// const screenshots = projects.map(({ siteScreenshot, src }) => {
-//     if (siteScreenshot) return siteScreenshot(src, `public/${fixScreenshotPath(src)}`);
+// dev 時はここはコメントアウト・処理が重たいなどなど
+// const screenshots = projects.map(({ hasScreenshot, src }) => {
+//     if (hasScreenshot) return siteScreenshot(src, `public/${fixScreenshotPath(src)}`);
 // });
 // await Promise.all(screenshots);
 ---
@@ -19,16 +20,16 @@ import { projects } from "../data/projects.ts";
 
         <div class="gallery">
             {
-                projects.map(({ title, siteScreenshot, src, alt, description, links = [] }) => (
+                projects.map(({ title, hasScreenshot, src, alt, description, links = [] }) => (
                     <Panel title={title} tag="article">
                         <div class="work-card">
                             <a
                                 href={src}
                                 target="_blank"
-                                aria-label={`${title}${siteScreenshot ? "のサイトへ移動" : "を原寸で表示"}`}
+                                aria-label={`${title}${hasScreenshot ? "のサイトへ移動" : "を原寸で表示"}`}
                             >
                                 <img
-                                    src={siteScreenshot ? `/${fixScreenshotPath(src)}` : src}
+                                    src={hasScreenshot ? `/${fixScreenshotPath(src)}` : src}
                                     alt={alt}
                                     loading="lazy"
                                 />

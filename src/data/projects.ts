@@ -3,7 +3,7 @@ import type { Project } from "../types/main.type";
 export const projects: Project[] = [
     {
         title: "ウィンドウシステム",
-        siteScreenshot: true,
+        hasScreenshot: true,
         src: "https://donneko.github.io/window-system-demo/",
         alt: "ウィンドウシステムのウェブサイトの画像",
         description:
@@ -15,7 +15,7 @@ export const projects: Project[] = [
                 external: true,
             },
             {
-                href: "https://donneko.github.com/donneko/window-system",
+                href: "https://github.com/donneko/window-system",
                 label: "GitHub でリポジトリをみる",
                 external: true,
             },
@@ -23,7 +23,7 @@ export const projects: Project[] = [
     },
     {
         title: "数学ウェブアプリ",
-        siteScreenshot: true,
+        hasScreenshot: true,
         src: "https://donneko.github.io/math-problems/",
         alt: "数学ウェブアプリのウェブサイトの画像",
         description:
@@ -43,14 +43,14 @@ export const projects: Project[] = [
     },
     {
         title: "昔のこのドメインのサイトデザイン案",
-        siteScreenshot: false,
+        hasScreenshot: false,
         src: "/site/site-works/img/DONNEKO.png",
         alt: "昔のこのドメインのサイトのデザイン画像",
         description: "デザインは良かったんだけど、実現する気力がなかった(泣)SF系にハマっていたとき",
     },
     {
         title: "ツイッターヘッダー画像1",
-        siteScreenshot: false,
+        hasScreenshot: false,
         src: "/site/site-works/img/DONNEKO.png",
         alt: "丼猫のTwitterヘッダー画像",
         description:
@@ -58,14 +58,14 @@ export const projects: Project[] = [
     },
     {
         title: "YouTubeヘッダー画像",
-        siteScreenshot: false,
+        hasScreenshot: false,
         src: "/site/site-works/img/DONNEKO2.png",
         alt: "丼猫のYouTubeヘッダー画像",
         description: "『画像1』をYouTube用のヘッダーに対応させたやつ。",
     },
     {
         title: "画像おにぎり",
-        siteScreenshot: false,
+        hasScreenshot: false,
         src: "/site/site-works/img/おにぎり.png",
         alt: "ペンタブで描いたおにぎりのイラスト",
         description:
@@ -73,7 +73,7 @@ export const projects: Project[] = [
     },
     {
         title: "配信用の21:9の枠",
-        siteScreenshot: false,
+        hasScreenshot: false,
         src: "/site/site-works/img/LIve.png",
         alt: "21対9の配信用フレーム素材",
         description:

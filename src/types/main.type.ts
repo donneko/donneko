@@ -6,7 +6,7 @@ export interface LinkTable extends Link {
 
 export interface Project {
     title: string;
-    siteScreenshot: boolean;
+    hasScreenshot: boolean;
     src: string;
     alt: string;
     description: string;
