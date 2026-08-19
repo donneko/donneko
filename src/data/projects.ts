@@ -1,348 +1,72 @@
-import type { Project, ProjectMedia } from "../types/main.type";
+import type { Link, Project, ProjectMedia } from "../types/main.type";
 
-const image = (src: string, alt: string): ProjectMedia => ({ type: "image", src, alt });
-const video = (src: string, alt: string): ProjectMedia => ({ type: "video", src, alt });
+const image = (work: string, file: string, alt: string): ProjectMedia => ({ type: "image", src: `/works/${work}/${file}`, alt });
+const video = (work: string, file: string, alt: string): ProjectMedia => ({ type: "video", src: `/works/${work}/${file}`, alt });
+const entry = (title: string, category: string, description: string, media: ProjectMedia[], links?: Link[]): Project => ({ title, category, description, media, links });
+const numbered = (title: string, category: string, slug: string, file: string, type: "image" | "video", count: number): Project[] =>
+    Array.from({ length: count }, (_, index) => {
+        const number = String(index + 1).padStart(2, "0");
+        const name = `${title} ${number}`;
+        return entry(name, category, `${title}の作品。`, [type === "image" ? image(`${slug}-${number}`, file, name) : video(`${slug}-${number}`, file, name)]);
+    });
+
+const npmLinks = (npm: string, github: string): Link[] => [
+    { href: `https://www.npmjs.com/package/@donneko/${npm}`, label: "npmで見る", external: true },
+    { href: `https://github.com/donneko/${github}`, label: "GitHub でリポジトリをみる", external: true },
+];
+
+const blenderRenders = ["jpg", "png", "jpg", "png", "jpg", "png", "jpg", "jpg"].map((extension, index) => {
+    const number = String(index + 1).padStart(2, "0");
+    return entry(`Blender レンダー ${number}`, "3d", "Blender で制作した3D作品。", [image(`blender-render-${number}`, `render.${extension}`, `Blender レンダー ${number}`)]);
+});
+
+const photoshopPosters = [
+    ["東京の都市ポスター", "tokyo-city-poster"], ["富士山ポスター", "mount-fuji-poster"],
+    ["求人マッチングポスター", "job-matching-poster"], ["報・連・相ポスター", "communication-poster"],
+    ["F-15ポスター", "fighter-jet-poster"], ["海ポスター", "sea-poster"],
+    ["夏ポスター", "summer-poster"], ["破壊ポスター", "tank-poster"],
+].map(([title, work]) => entry(title, "design", "Photoshop で制作したグラフィック作品。", [image(work, "poster.png", title)]));
 
 export const projects: Project[] = [
-    {
-        title: "tyoi-server",
-        category: "npm",
-        media: [image("/works/tyoi-server/image.png", "tyoi-serverの起動画像")],
-        description:
-            "小さなAPIサーバーや静的ファイルサーバーを簡単に立ち上げるために作っているNode.js / TypeScript製のサーバーフレームワーク。CLI、WebSocket、API Registry、ログ、セキュリティ機能などを実装している。npmにも公開していて、現在も開発中。",
-        links: [
-            {
-                href: "https://www.npmjs.com/package/@donneko/tyoi-server",
-                label: "npmで見る",
-                external: true,
-            },
-            {
-                href: "https://github.com/donneko/tyoi-api-node-server",
-                label: "GitHub でリポジトリをみる",
-                external: true,
-            },
-        ],
-    },
-    {
-        title: "tyoi-logger",
-        category: "npm",
-        media: [image("/works/tyoi-logger/image.png", "tyoi-loggerの起動画像")],
-        description:
-            "Node.js / TypeScript 向けに作っているロガー。必要な場所で気軽にログを残せるようにしたくて作成中。",
-        links: [
-            {
-                href: "https://www.npmjs.com/package/@donneko/tyoi-logger",
-                label: "npmで見る",
-                external: true,
-            },
-            {
-                href: "https://github.com/donneko/tyoi-logger",
-                label: "GitHub でリポジトリをみる",
-                external: true,
-            },
-        ],
-    },
-    {
-        title: "tyoi-cli",
-        category: "npm",
-        media: [image("/works/tyoi-cli/image.png", "tyoi-cliの起動画像")],
-        description:
-            "Node.js / TypeScript 向けに作っている CLI ツール。コマンドラインから使いやすい仕組みを試したくて作成中。",
-        links: [
-            {
-                href: "https://www.npmjs.com/package/@donneko/tyoi-cli",
-                label: "npmで見る",
-                external: true,
-            },
-            {
-                href: "https://github.com/donneko/tyoi-cli",
-                label: "GitHub でリポジトリをみる",
-                external: true,
-            },
-        ],
-    },
-    {
-        title: "site-map",
-        category: "npm",
-        media: [
-            image("/works/site-map/image.png", "site-mapのロゴ画像"),
-            image("/works/site-map/sc.png", "site-mapの出力のJSON画像"),
-        ],
-        description:
-            "サイトマップを扱うために作っている npm パッケージ。必要な情報をまとめて扱いやすくしたくて作成中。",
-        links: [
-            {
-                href: "https://www.npmjs.com/package/@donneko/site-map",
-                label: "npmで見る",
-                external: true,
-            },
-            {
-                href: "https://github.com/donneko/site-map",
-                label: "GitHub でリポジトリをみる",
-                external: true,
-            },
-        ],
-    },
-    {
-        title: "RΛLINE 3D Visual Portfolio",
-        category: "web",
-        media: [image("/works/r4line/logos.jpg", "RΛLINE 3D Visual Portfolio のロゴ素材")],
-        description:
-            "3D 表現を使った架空のビジュアルポートフォリオ。ロゴなどの素材もあわせて制作した。",
-        links: [
-            {
-                href: "http://r4line.donneko.net/",
-                label: "ウェブサイトをみる",
-                external: true,
-            },
-        ],
-    },
-    {
-        title: "ウィンドウシステム",
-        category: "web",
-        media: [
-            image("/works/window-system/dev.jpg", "ウィンドウシステムの開発画面"),
-            image("/works/window-system/used.jpg", "ウィンドウシステムの利用例"),
-            image("/works/window-system/window-system-demo-.jpeg", "ウィンドウシステムのデモ画面"),
-        ],
-        description: "ウェブサイトで色々操作したいときに、便利だなぁって思ったんで作成",
-        links: [
-            {
-                href: "https://donneko.github.io/window-system-demo/",
-                label: "ウェブサイトを開く",
-                external: true,
-            },
-            {
-                href: "https://github.com/donneko/window-system",
-                label: "GitHub でリポジトリをみる",
-                external: true,
-            },
-        ],
-    },
-    {
-        title: "数学ウェブアプリ",
-        category: "web",
-        media: [
-            image("/works/math-problems/design1.jpg", "数学ウェブアプリのデザイン案"),
-            image("/works/math-problems/design2.png", "数学ウェブアプリのデザイン案"),
-            image("/works/math-problems/math-problems.jpeg", "数学ウェブアプリの画面"),
-        ],
-        description:
-            "昔学内のコンテストに出すために作ったサイト。今見たらJSのコードがベタ書きとかで恥ずかしい(｡>﹏<｡)",
-        links: [
-            {
-                href: "https://donneko.github.io/math-problems/",
-                label: "ウェブサイトを開く",
-                external: true,
-            },
-            {
-                href: "https://github.com/donneko/math-problems/",
-                label: "GitHub でリポジトリをみる",
-                external: true,
-            },
-        ],
-    },
-    {
-        title: "AI実験",
-        category: "program",
-        media: [
-            image("/works/ai/G2-l06UbwAAgrwU.png", "AI 実験の実行結果"),
-            image("/works/ai/G2xmWnybIAAAqpA.jpg", "AI 実験の画面"),
-            image("/works/ai/GuqOfAnWYAAd1gX.jpg", "AI 実験の画面"),
-            image("/works/ai/GWrH4v_aIAEf4Vd.jpg", "AI 実験の画面"),
-        ],
-        description: "AI を使って、入力に対する反応やアイデアの出し方を試していたときの記録。",
-    },
-    {
-        title: "Blender作品集",
-        category: "3d",
-        media: [
-            video("/works/blender/donneko_-1963073766164201561-01.mp4", "Blender 作品の動画"),
-            video("/works/blender/donneko_-1963428822042513710-01.mp4", "Blender 作品の動画"),
-            video("/works/blender/donneko_-1963465975145418823-01.mp4", "Blender 作品の動画"),
-            video("/works/blender/donneko_-1963540582367981775-01.mp4", "Blender 作品の動画"),
-            video("/works/blender/donneko_-1964687692467503345-01.mp4", "Blender 作品の動画"),
-            video("/works/blender/donneko_-1966069801048215566-01.mp4", "Blender 作品の動画"),
-            video("/works/blender/donneko_-1968174318745161863-01.mp4", "Blender 作品の動画"),
-            video("/works/blender/donneko_-1968280410930180259-01.mp4", "Blender 作品の動画"),
-            image("/works/blender/G078FJDaYAALmxD.jpg", "Blender で制作した3Dモデル"),
-            image("/works/blender/G0D8DO-bgAAy7fB.png", "Blender 作品の画面"),
-            image("/works/blender/G0DssWcaMAAQjzQ.jpg", "Blender 作品の画面"),
-            image("/works/blender/G0XudAvbgAAnktl.png", "Blender 作品の画面"),
-            image("/works/blender/G2TDwwvbMAAG_lO.jpg", "Blender 作品の画面"),
-            image("/works/blender/Gz-KTGHb0AACuB0.png", "Blender 作品の画面"),
-            image("/works/blender/Gz4zeF6bAAEEyu7.jpg", "Blender 作品の画面"),
-            image("/works/blender/Gz56Llsa8AAUtyi.jpg", "Blender 作品の画面"),
-        ],
-        description:
-            "Blender で作ったモデルや動きの試作をまとめたもの。いろいろ触りながら表現を試していた。",
-    },
-    {
-        title: "バス時刻表",
-        category: "web",
-        media: [
-            image("/works/bus-timetable/HJFWxU6awAA1fwG.png", "バス時刻表の表示画面"),
-            image("/works/bus-timetable/HJFWxU6bkAA-2hf.png", "バス時刻表の表示画面"),
-            image("/works/bus-timetable/HJFWxU7acAAE2Bb.png", "バス時刻表の表示画面"),
-            image("/works/bus-timetable/HJFWxVXaoAAdeek.png", "バス時刻表の表示画面"),
-        ],
-        description: "次のバスと出発までの時間を見やすく表示する画面を作ってみた。",
-    },
-    {
-        title: "C言語 数当てゲーム",
-        category: "program",
-        media: [image("/works/c-language/HEkbYE5bkAI2P3d.jpg", "C言語で作った数当てゲームの画面")],
-        description: "C言語で作った、難易度を選んで遊べる数当てゲーム。",
-    },
-    {
-        title: "電子工作",
-        category: "hardware",
-        media: [
-            video("/works/electronic-crafts/donneko_-1969764404737777993-01.mp4", "電子工作の動画"),
-            video("/works/electronic-crafts/donneko_-1969792894765859078-01.mp4", "電子工作の動画"),
-            image("/works/electronic-crafts/G1YcTNHagAIlYGB.jpg", "電子工作の写真"),
-        ],
-        description: "部品を触りながら、電子工作でできることを試していたときの記録。",
-    },
-    {
-        title: "エラーページ集",
-        category: "web",
-        media: [
-            video("/works/error-page/donneko_-1964148747706986760-01.mp4", "エラーページの動画"),
-            video("/works/error-page/donneko_-1968324172809134142-01.mp4", "エラーページの動画"),
-            image("/works/error-page/G-4BqR0XkAAhkjt.jpg", "403 エラーページ"),
-            image("/works/error-page/Gq3q6albQAAgBrH.jpg", "エラーページのデザイン"),
-            image("/works/error-page/Gq3qz_DX0AEpcSg.jpg", "エラーページのデザイン"),
-            image("/works/error-page/Gu0lsGvWwAASmfr.jpg", "エラーページのデザイン"),
-            image("/works/error-page/Gu2i3XzWgAAA1FI.jpg", "エラーページのデザイン"),
-            image("/works/error-page/Gu2sxeoWUAAx3KC.jpg", "エラーページのデザイン"),
-        ],
-        description: "ただのエラー画面にも雰囲気をつけたくて作っていたデザイン集。",
-    },
-    {
-        title: "ゲーム制作",
-        category: "video",
-        media: [video("/works/game/donneko_-1904553158417986007-01.mp4", "ゲーム制作の動画")],
-        description: "ゲームを作っていたときの動画記録。",
-    },
-    {
-        title: "Xヘッダー画像",
-        category: "design",
-        media: [image("/works/header-twitter/DONNEKO2.png", "DONNEKO のXヘッダー画像")],
-        description: "ヘッダー画像がないなと思ったときに、ペットボトルのラベル風に作ってみたもの。",
-    },
-    {
-        title: "YouTubeヘッダー画像",
-        category: "design",
-        media: [image("/works/header-youtube/DONNEKO.png", "DONNEKO のYouTubeヘッダー画像")],
-        description: "DONNEKO のデザインを YouTube 用の横長サイズに合わせたヘッダー画像。",
-    },
-    {
-        title: "Illustrator作品集",
-        category: "design",
-        media: [
-            image("/works/illustrator/G-_YRMpXMAAtHDO.jpg", "Illustrator 作品"),
-            image("/works/illustrator/G0XeW9sagAA4yT-.png", "Illustrator 作品"),
-            image("/works/illustrator/G0kq90GbMAA1Zkk.png", "Illustrator 作品"),
-            image("/works/illustrator/G0kq9v7awAEnIw8.png", "Illustrator 作品"),
-            image("/works/illustrator/G0kq9wAacAAA6vg.png", "Illustrator 作品"),
-            image("/works/illustrator/G0kq9zzaMAYeRxt.png", "Illustrator 作品"),
-            image("/works/illustrator/G0ksbJGakAA6bWL.png", "Illustrator 作品"),
-            image("/works/illustrator/G2oxFiRaEAAFD31.png", "Illustrator 作品"),
-            image("/works/illustrator/G2UBjQNa4AAG6eb.jpg", "Illustrator 作品"),
-            image("/works/illustrator/G2UFuLIbMAI7BQW.png", "Illustrator 作品"),
-            image("/works/illustrator/G3M-gebbsAA3C9s.jpg", "Illustrator 作品"),
-            image("/works/illustrator/G5DabPEagAA3hdS.jpg", "Illustrator 作品"),
-            image("/works/illustrator/G_B_zbfW0AAvvjN.jpg", "Illustrator 作品"),
-            image("/works/illustrator/G_CeaunWMAEgYnn.jpg", "Illustrator 作品"),
-            image("/works/illustrator/G_EzmFNW4AEd38q.jpg", "Illustrator 作品"),
-            image("/works/illustrator/G_FrMeUXMAAtSHn.jpg", "Illustrator 作品"),
-            image("/works/illustrator/G_FrOlOWoAAmobl.jpg", "Illustrator 作品"),
-            image("/works/illustrator/GihTV2GaYAAqTF1.png", "Illustrator 作品"),
-            image("/works/illustrator/GihTV2HagAAaMWk.png", "Illustrator 作品"),
-            image("/works/illustrator/GihTV2HbsAA7zVq.png", "Illustrator 作品"),
-            image("/works/illustrator/lIve.png", "配信用の21対9フレーム素材"),
-        ],
-        description: "Illustrator で作ったロゴ、グラフィック、配信向けの素材など。",
-    },
-    {
-        title: "メモアプリリスト",
-        category: "web",
-        media: [
-            image("/works/memo/GvkRkcfXQAAWEm_.jpg", "メモアプリリストの画面"),
-            image("/works/memo/image.png", "メモアプリリストの画面"),
-        ],
-        description: "メモを気軽に書き留めるための、シンプルなアプリ画面。",
-    },
-    {
-        title: "このサイトの旧デザイン",
-        category: "web",
-        media: [
-            image("/works/my-site/G-9xDw8XsAEUCUV.jpg", "このサイトの旧デザイン"),
-            image("/works/my-site/G-9xDxHWMAE7Rd9.jpg", "このサイトの旧デザイン"),
-            image("/works/my-site/G-9xDxHWUAA708F.jpg", "このサイトの旧デザイン"),
-            image("/works/my-site/G1IZFOtasAAmrh_.jpg", "このサイトの旧デザイン"),
-            image("/works/my-site/G1IZFOub0AAVbrq.jpg", "このサイトの旧デザイン"),
-            image("/works/my-site/GrI45QhX0AAa4nQ.jpg", "このサイトの旧デザイン"),
-            image("/works/my-site/HE9hHFpa0AAb3ys.png", "このサイトの旧デザイン"),
-        ],
-        description: "このサイトを作り直す前に考えていた、実験的なデザイン案。",
-    },
-    {
-        title: "おにぎりイラスト",
-        category: "illustration",
-        media: [
-            image(
-                "/works/other/%E3%81%8A%E3%81%AB%E3%81%8E%E3%82%8A.png",
-                "ペンタブで描いたおにぎりのイラスト"
-            ),
-        ],
-        description: "小さなペンタブの動作確認がてら描いたおにぎり。",
-    },
-    {
-        title: "Photoshop作品集",
-        category: "design",
-        media: [
-            image("/works/photoshop/G2UK5lObMAETeBF.png", "Photoshop 作品"),
-            image("/works/photoshop/G2UPzUpbUAAAiFt.png", "Photoshop 作品"),
-            image("/works/photoshop/G2UXxImboAAPGDB.png", "Photoshop 作品"),
-            image("/works/photoshop/G2Z0xrQaYAABErZ.png", "Photoshop 作品"),
-            image("/works/photoshop/G2Z7zM3aMAA9KuU.png", "Photoshop 作品"),
-            image("/works/photoshop/G2Zu9GjbMAI9WyH.png", "Photoshop 作品"),
-            image("/works/photoshop/G2aAhEOawAAb1Xt.png", "Photoshop 作品"),
-            image("/works/photoshop/G2aHuvUawAAqG1p.png", "Photoshop 作品"),
-        ],
-        description: "Photoshop で加工やレイアウトを試していた画像作品。",
-    },
-    {
-        title: "自作Webサーバー",
-        category: "program",
-        media: [image("/works/server/HE8hTFyb0AAkd6u.jpg", "自作Webサーバーの実行画面")],
-        description: "Node.js で Web サーバーの動きを試していたときの記録。",
-    },
-    {
-        title: "Stormworks作品",
-        category: "game",
-        media: [
-            video("/works/stormworks/donneko_-1842902707222491292-01.mp4", "Stormworks 作品の動画"),
-            image("/works/stormworks/GZH-vKMbQAAnky1.png", "Stormworks 作品"),
-            image("/works/stormworks/GiNZSgnaIAAlYlY.jpg", "Stormworks 作品"),
-            image("/works/stormworks/GwsoB1TaQAAri-i.jpg", "Stormworks 作品"),
-            image("/works/stormworks/GyjLuj3aUAAX0Oy.jpg", "Stormworks 作品"),
-            image("/works/stormworks/GyQS1hza4AA3G6_.jpg", "Stormworks 作品"),
-        ],
-        description: "Stormworks の中で作った装置や表示まわりの記録。",
-    },
-    {
-        title: "学習・実験",
-        category: "program",
-        media: [
-            video("/works/study/donneko_-1951440910518251749-01.mp4", "学習・実験の動画"),
-            video("/works/study/donneko_-1967840906582823122-01.mp4", "学習・実験の動画"),
-            video("/works/study/donneko_-1967934938315100397-01.mp4", "学習・実験の動画"),
-            image("/works/study/G1S1rqYbQAAWS4G.jpg", "学習・実験の記録"),
-            image("/works/study/GaafZljaUAATu21.jpg", "学習・実験の記録"),
-        ],
-        description: "勉強や実験の途中で作ったものを残していた記録。",
-    },
+    entry("tyoi-server", "npm", "小さなAPIサーバーや静的ファイルサーバーを簡単に立ち上げるために作っているNode.js / TypeScript製のサーバーフレームワーク。", [image("tyoi-server", "terminal-output.png", "tyoi-server の起動画面")], npmLinks("tyoi-server", "tyoi-api-node-server")),
+    entry("tyoi-logger", "npm", "Node.js / TypeScript 向けに作っているロガー。", [image("tyoi-logger", "terminal-output.png", "tyoi-logger の起動画面")], npmLinks("tyoi-logger", "tyoi-logger")),
+    entry("tyoi-cli", "npm", "Node.js / TypeScript 向けに作っている CLI ツール。", [image("tyoi-cli", "terminal-output.png", "tyoi-cli の起動画面")], npmLinks("tyoi-cli", "tyoi-cli")),
+    entry("site-map", "npm", "サイトマップを扱うために作っている npm パッケージ。", [image("site-map", "logo.png", "site-map のロゴ"), image("site-map", "json-output.png", "site-map のJSON出力")], npmLinks("site-map", "site-map")),
+    entry("RΛLINE 3D Visual Portfolio", "web", "3D 表現を使った架空のビジュアルポートフォリオ。", [image("r4line-portfolio", "preview.png", "RΛLINE の画面"), image("r4line-portfolio", "logo-sheet.jpg", "RΛLINE のロゴ素材")], [{ href: "http://r4line.donneko.net/", label: "ウェブサイトをみる", external: true }]),
+    entry("ウィンドウシステム", "web", "ウェブサイトで色々操作したいときに、便利だなぁって思ったんで作成。", [image("window-system", "development.jpg", "開発画面"), image("window-system", "usage.jpg", "利用例"), image("window-system", "demo.jpeg", "デモ画面")], [{ href: "https://donneko.github.io/window-system-demo/", label: "ウェブサイトを開く", external: true }, { href: "https://github.com/donneko/window-system", label: "GitHub でリポジトリをみる", external: true }]),
+    entry("数学ウェブアプリ", "web", "昔学内のコンテストに出すために作ったサイト。", [image("math-problems", "design-01.jpg", "デザイン案"), image("math-problems", "design-02.png", "デザイン案"), image("math-problems", "app-preview.jpeg", "アプリ画面")], [{ href: "https://donneko.github.io/math-problems/", label: "ウェブサイトを開く", external: true }, { href: "https://github.com/donneko/math-problems/", label: "GitHub でリポジトリをみる", external: true }]),
+    entry("タグ連鎖モデル", "program", "入力からアイデアをつなげるモデルの実験。", [image("tag-chain-model", "result.png", "タグ連鎖モデルの実行結果")]),
+    ...numbered("AI実験", "program", "ai-experiment", "preview.jpg", "image", 3),
+    ...numbered("Blender アニメーション", "3d", "blender-animation", "animation.mp4", "video", 8),
+    ...blenderRenders,
+    entry("バス時刻表", "web", "次のバスと出発までの時間を見やすく表示する画面を作ってみた。", ["01", "02", "03", "04"].map((number) => image("bus-timetable", `dashboard-${number}.png`, "バス時刻表の画面"))),
+    entry("C言語 数当てゲーム", "program", "C言語で作った、難易度を選んで遊べる数当てゲーム。", [image("number-guessing-game", "gameplay.jpg", "ゲーム画面")]),
+    entry("電子工作", "hardware", "部品を触りながら、電子工作でできることを試していた記録。", [video("electronic-craft", "demo-01.mp4", "電子工作の動画"), video("electronic-craft", "demo-02.mp4", "電子工作の動画"), image("electronic-craft", "prototype.jpg", "電子工作の試作品")]),
+    entry("エラーページ", "web", "エラー画面にも雰囲気をつけたくて作ったデザイン。", [video("error-pages", "demo-01.mp4", "動画"), video("error-pages", "demo-02.mp4", "動画"), image("error-pages", "403-page.jpg", "403 エラーページ"), ...["01", "02", "03", "04", "05"].map((number) => image("error-pages", `page-${number}.jpg`, "エラーページ"))]),
+    entry("ゲーム制作", "video", "ゲームを作っていたときの動画記録。", [video("game-project", "demo.mp4", "ゲーム制作の動画")]),
+    entry("Xヘッダー画像", "design", "ペットボトルのラベル風に作ったヘッダー画像。", [image("donneko-twitter-header", "header.png", "DONNEKO のXヘッダー画像")]),
+    entry("YouTubeヘッダー画像", "design", "DONNEKO のデザインを横長サイズに合わせたヘッダー画像。", [image("donneko-youtube-header", "header.png", "DONNEKO のYouTubeヘッダー画像")]),
+    entry("宇宙図版", "design", "宇宙をテーマにした図版デザイン。", [image("space-graphics", "fall-map.jpg", "FALL MAP の図版"), image("space-graphics", "space-debris.jpg", "SPACE DEBRIS の図版")]),
+    entry("グリッドシステム", "design", "グリッドをテーマにしたグラフィック。", [image("grid-system", "title-card.jpg", "GRID SYSTEM のタイトルカード")]),
+    entry("Automated Systems", "design", "自動化システムをテーマにしたグラフィック。", [image("automated-systems", "poster.jpg", "ポスター")]),
+    entry("市民生活", "design", "市民サービスを題材にしたグラフィック。", [image("city-services", "poster.jpg", "ポスター")]),
+    entry("インターネットサービス", "design", "ネットワークを題材にしたグラフィック。", [image("internet-services", "poster.jpg", "ポスター")]),
+    entry("梱包表示システム", "design", "梱包用の注意表示とアイコンをまとめたデザイン。", [image("packaging-symbols", "caution-label.png", "注意ラベル"), image("packaging-symbols", "color-palette.png", "配色案"), image("packaging-symbols", "handling-icons.png", "取扱表示アイコン"), image("packaging-symbols", "layout-guide.png", "レイアウトガイド"), image("packaging-symbols", "caution-layout.png", "注意表示のレイアウト"), image("packaging-symbols", "icon-set.png", "取扱表示アイコンセット")]),
+    entry("インタラクティブ字幕", "design", "ノードで組み立てる字幕表現の試作。", [image("interactive-subtitles", "preview.png", "プレビュー"), image("interactive-subtitles", "editor.jpg", "編集画面")]),
+    entry("日本語タイポグラフィ", "design", "日本語文字を使ったグラフィックの試作。", [image("japanese-typography", "editor.jpg", "編集画面")]),
+    entry("HTML/CSSコーディングバナー", "design", "HTML/CSS コーディングを題材にしたバナー。", [image("coding-course-banner", "banner.png", "コーディングバナー")]),
+    entry("デジタルデザインコレクション", "design", "過去に作った画面やグラフィックをまとめたもの。", [image("digital-design-collection", "collection.jpg", "コレクション")]),
+    entry("自習マナーポスター", "design", "自習時のマナーを伝えるポスター。", [image("self-study-posters", "quiet-study.png", "静かな自習"), image("self-study-posters", "no-voice.png", "声を使わない"), image("self-study-posters", "no-talking.png", "会話を控える")]),
+    entry("配信用フレーム", "design", "ワイド配信向けに作ったフレーム素材。", [image("streaming-frame", "frame.png", "配信用の21対9フレーム")]),
+    entry("メモアプリリスト", "web", "メモを気軽に書き留めるためのシンプルなアプリ。", [image("memo-app", "preview-01.jpg", "メモアプリの画面"), image("memo-app", "preview-02.png", "メモアプリの画面")]),
+    entry("このサイトの旧デザイン", "web", "このサイトを作り直す前に考えていた実験的なデザイン案。", [...["01", "02", "03", "04", "05", "06"].map((number) => image("personal-site-concept", `preview-${number}.jpg`, "旧デザイン")), image("personal-site-concept", "preview-07.png", "旧デザイン")]),
+    entry("おにぎりイラスト", "illustration", "小さなペンタブの動作確認がてら描いたおにぎり。", [image("onigiri-illustration", "illustration.png", "おにぎりのイラスト")]),
+    ...photoshopPosters,
+    entry("自作Webサーバー", "program", "Node.js で Web サーバーの動きを試していた記録。", [image("node-server", "terminal-output.jpg", "自作Webサーバーの実行画面")]),
+    entry("Stormworks デモ", "game", "Stormworks で制作したものの動画記録。", [video("stormworks-demo", "demo.mp4", "Stormworks のデモ動画")]),
+    entry("Stormworks モニターウォール", "game", "Stormworks の中で制作したモニター表示。", [image("stormworks-monitor-wall", "preview.jpg", "モニターウォール")]),
+    ...numbered("Stormworks ビルド", "game", "stormworks-build", "preview.jpg", "image", 3),
+    entry("Stormworks ビルド 04", "game", "Stormworks の中で制作したもの。", [image("stormworks-build-04", "preview.png", "Stormworks ビルド 04")]),
+    ...numbered("学習・実験", "program", "study-experiment", "demo.mp4", "video", 3),
+    ...["04", "05"].map((number) => entry(`学習・実験 ${number}`, "program", "学習や試作の記録。", [image(`study-experiment-${number}`, "photo.jpg", `学習・実験 ${number}`)])),
 ];

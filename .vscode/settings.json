@@ -1,5 +1,5 @@
 {
-    "cSpell.words": ["donneko", "hogehoge", "qrcode", "tyoi"],
+    "cSpell.words": ["donneko", "hogehoge", "onigiri", "qrcode", "RΛLINE", "Stormworks", "tyoi"],
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "eslint.validate": ["javascript", "typescript"]
