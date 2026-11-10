@@ -16,7 +16,6 @@ const { title, description } = Astro.props;
     <div class="page blog-page">
         <nav class="blog-navigation" aria-label="ブログメニュー">
             <a href={blogUrl()}>記事一覧</a>
-            <a href={blogUrl("rss.xml")}>RSS</a>
         </nav>
         <slot />
         <aside class="blog-categories" aria-label="ブログのカテゴリ">
