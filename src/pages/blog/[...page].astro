@@ -1,0 +1,48 @@
+---
+import type { GetStaticPaths, Page } from "astro";
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import PostList from "../../components/blog/PostList.astro";
+import { blogUrl, getPublishedPosts, type BlogPost } from "../../lib/blog";
+
+export const getStaticPaths = (async ({ paginate }) => {
+    return paginate(await getPublishedPosts(), { pageSize: 10 });
+}) satisfies GetStaticPaths;
+
+interface Props {
+    page: Page<BlogPost>;
+}
+
+const { page } = Astro.props;
+const pageUrl = (number: number) => blogUrl(number === 1 ? "" : `${number}/`);
+---
+
+<BlogLayout
+    title={page.currentPage === 1 ? "技術ブログ" : `技術ブログ（${page.currentPage}ページ目）`}
+    description={`開発記録、技術解説、設計上の判断や実験の記録をまとめた技術ブログ。${page.currentPage}ページ目。`}
+>
+    <h1 class="page-title">技術ブログ</h1>
+    <p class="blog-intro">
+        開発の過程や技術についての記録です。制作物の紹介は<a href="/works/">Works</a>へ。
+    </p>
+    <p>全{page.total}件</p>
+    <PostList posts={page.data} />
+    {
+        page.lastPage > 1 && (
+            <nav class="blog-pagination" aria-label="記事一覧のページ送り">
+                {page.currentPage > 1 && (
+                    <a href={pageUrl(page.currentPage - 1)} rel="prev">
+                        ← 前のページ
+                    </a>
+                )}
+                <span aria-current="page">
+                    {page.currentPage} / {page.lastPage}ページ
+                </span>
+                {page.currentPage < page.lastPage && (
+                    <a href={pageUrl(page.currentPage + 1)} rel="next">
+                        次のページ →
+                    </a>
+                )}
+            </nav>
+        )
+    }
+</BlogLayout>

@@ -1,0 +1,33 @@
+---
+import PostMeta from "./PostMeta.astro";
+import { postUrl, type BlogPost } from "../../lib/blog";
+
+interface Props {
+    posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+---
+
+{
+    posts.length ? (
+        <ol class="post-list">
+            {posts.map((post) => (
+                <li>
+                    <article>
+                        <h2>
+                            <a href={postUrl(post)}>{post.data.title}</a>
+                        </h2>
+                        <PostMeta post={post} />
+                        <p class="post-description">{post.data.description}</p>
+                        <a href={postUrl(post)} aria-label={`${post.data.title}の全文を読む`}>
+                            全文を読む →
+                        </a>
+                    </article>
+                </li>
+            ))}
+        </ol>
+    ) : (
+        <p class="blog-empty">公開されている記事はまだありません。</p>
+    )
+}

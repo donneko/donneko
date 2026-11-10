@@ -1,0 +1,42 @@
+<dialog class="work-lightbox" data-work-lightbox-dialog aria-labelledby="work-lightbox-heading">
+    <div class="work-lightbox-content">
+        <div class="work-lightbox-header">
+            <h2 id="work-lightbox-heading">画像を拡大</h2>
+            <button type="button" data-lightbox-close autofocus>閉じる ×</button>
+        </div>
+        <img data-lightbox-image alt="" />
+        <p data-lightbox-caption></p>
+    </div>
+</dialog>
+
+<script>
+    const dialog = document.querySelector<HTMLDialogElement>("[data-work-lightbox-dialog]");
+    if (dialog && typeof dialog.showModal === "function") {
+        const image = dialog.querySelector<HTMLImageElement>("[data-lightbox-image]")!;
+        const caption = dialog.querySelector<HTMLElement>("[data-lightbox-caption]")!;
+        let trigger: HTMLAnchorElement | null = null;
+        document.addEventListener("click", (event) => {
+            const link =
+                event.target instanceof Element
+                    ? event.target.closest<HTMLAnchorElement>("a[data-work-lightbox]")
+                    : null;
+            if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+            event.preventDefault();
+            trigger = link;
+            image.src = link.href;
+            image.alt = link.querySelector("img")?.alt ?? "作品画像";
+            caption.textContent = image.alt;
+            dialog.showModal();
+        });
+        dialog
+            .querySelector("[data-lightbox-close]")
+            ?.addEventListener("click", () => dialog.close());
+        dialog.addEventListener("click", (event) => {
+            if (event.target === dialog) dialog.close();
+        });
+        dialog.addEventListener("close", () => {
+            image.removeAttribute("src");
+            trigger?.focus({ preventScroll: true });
+        });
+    }
+</script>

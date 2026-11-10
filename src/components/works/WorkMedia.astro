@@ -1,0 +1,65 @@
+---
+import { localUrl, type WorkMedia } from "../../lib/works";
+
+interface Props {
+    media?: WorkMedia;
+    title: string;
+    eager?: boolean;
+}
+
+const { media, title, eager = false } = Astro.props;
+const alt = media?.alt || `${title}のプレビュー`;
+---
+
+{
+    media ? (
+        <figure class="work-media">
+            {media.type === "image" ? (
+                <a
+                    class="work-media-frame"
+                    href={localUrl(media.src)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-work-lightbox
+                    aria-label={`${alt}を拡大（新しいタブでも開けます）`}
+                >
+                    <img
+                        src={localUrl(media.src)}
+                        alt={alt}
+                        width="1000"
+                        height="625"
+                        loading={eager ? "eager" : "lazy"}
+                        decoding="async"
+                    />
+                    <span class="work-enlarge" aria-hidden="true">
+                        拡大 ↗
+                    </span>
+                </a>
+            ) : (
+                <div class="work-media-frame">
+                    <video
+                        src={localUrl(media.src)}
+                        controls
+                        playsinline
+                        preload="none"
+                        poster={media.poster ? localUrl(media.poster) : undefined}
+                        width="1000"
+                        height="625"
+                        aria-label={alt}
+                    >
+                        動画を再生できない場合は<a href={localUrl(media.src)}>動画ファイルを開く</a>
+                        。
+                    </video>
+                </div>
+            )}
+            <figcaption>{alt}</figcaption>
+        </figure>
+    ) : (
+        <div class="work-media-frame work-placeholder" role="img" aria-label={`${title}：画像なし`}>
+            <>
+                <span aria-hidden="true">◇</span>
+                <span>画像はまだありません</span>
+            </>
+        </div>
+    )
+}

@@ -1,0 +1,28 @@
+---
+import type { GetStaticPaths } from "astro";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+import PostList from "../../../components/blog/PostList.astro";
+import { getPublishedPosts, tagSlug, type BlogPost } from "../../../lib/blog";
+
+export const getStaticPaths = (async () => {
+    const posts = await getPublishedPosts();
+    const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+    return tags.map((tag) => ({
+        params: { tag: tagSlug(tag) },
+        props: { tag, posts: posts.filter((post) => post.data.tags.includes(tag)) },
+    }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+    tag: string;
+    posts: BlogPost[];
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BlogLayout title={`#${tag}の記事`} description={`「${tag}」タグの付いた技術ブログの記事一覧。`}>
+    <h1 class="page-title">#{tag}</h1>
+    <p>「{tag}」の記事一覧（{posts.length}件）</p>
+    <PostList posts={posts} />
+</BlogLayout>

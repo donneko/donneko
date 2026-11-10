@@ -1,0 +1,75 @@
+---
+import WorkMedia from "./WorkMedia.astro";
+import ALink from "../link.astro";
+import {
+    localUrl,
+    workMainMedia,
+    workCategoryLabel,
+    workSubcategoryLabel,
+    worksUrl,
+    type Work,
+} from "../../lib/works";
+
+interface Props {
+    work: Work;
+}
+
+const { work } = Astro.props;
+const { title, year, status, description, technologies, features, links } = work.data;
+---
+
+<article class="project-summary" data-preview-work={work.id}>
+    <WorkMedia media={workMainMedia(work)} title={title} />
+    <div class="project-summary-content">
+        <p class="work-eyebrow">{workCategoryLabel(work)}{year ? ` / ${year}年` : ""}</p>
+        <h4>{title}</h4>
+        {workSubcategoryLabel(work) && <p class="work-subcategory">{workSubcategoryLabel(work)}</p>}
+        {status && <p class="work-status">状況：{status}</p>}
+        <p>{description}</p>
+        {
+            technologies.length > 0 && (
+                <div class="work-fact">
+                    <>
+                        <h5>使用技術</h5>
+                        <ul class="work-technologies">
+                            {technologies.map((technology) => (
+                                <li>{technology}</li>
+                            ))}
+                        </ul>
+                    </>
+                </div>
+            )
+        }
+        {
+            features.length > 0 && (
+                <div class="work-fact">
+                    <>
+                        <h5>主な特徴</h5>
+                        <ul>
+                            {features.map((feature) => (
+                                <li>{feature}</li>
+                            ))}
+                        </ul>
+                    </>
+                </div>
+            )
+        }
+        {
+            links.length > 0 && (
+                <div class="work-fact">
+                    <>
+                        <h5>リンク</h5>
+                        <ul class="work-links">
+                            {links.map((link) => (
+                                <li>
+                                    <ALink {...link} href={localUrl(link.href)} />
+                                </li>
+                            ))}
+                        </ul>
+                    </>
+                </div>
+            )
+        }
+        <a class="work-detail-link" href={worksUrl(work.id)}>詳しく見る →</a>
+    </div>
+</article>

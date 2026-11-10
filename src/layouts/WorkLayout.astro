@@ -1,0 +1,17 @@
+---
+import Layout from "./Layout.astro";
+import ImageLightbox from "../components/works/ImageLightbox.astro";
+import "../styles/works.css";
+
+interface Props {
+    title: string;
+    description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<Layout title={title} description={description}>
+    <div class="page works-page"><slot /></div>
+    <ImageLightbox />
+</Layout>

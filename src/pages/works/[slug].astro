@@ -1,0 +1,132 @@
+---
+import type { GetStaticPaths } from "astro";
+import { render } from "astro:content";
+import WorkLayout from "../../layouts/WorkLayout.astro";
+import WorkMedia from "../../components/works/WorkMedia.astro";
+import WorkGallery from "../../components/works/WorkGallery.astro";
+import ALink from "../../components/link.astro";
+import {
+    getPublishedWorks,
+    localUrl,
+    workCategoryLabel,
+    workMainMedia,
+    workSubcategoryLabel,
+    worksUrl,
+    type Work,
+} from "../../lib/works";
+import { getPublishedPosts, postUrl, formatBlogDate } from "../../lib/blog";
+
+export const getStaticPaths = (async () =>
+    (await getPublishedWorks()).map((work) => ({
+        params: { slug: work.id },
+        props: { work },
+    }))) satisfies GetStaticPaths;
+
+interface Props {
+    work: Work;
+}
+
+const { work } = Astro.props;
+const { title, description, year, status, technologies, features, links, gallery, relatedPosts } =
+    work.data;
+const { Content } = await render(work);
+const relatedIds = new Set(relatedPosts.map(({ id }) => id));
+const related = (await getPublishedPosts()).filter((post) => relatedIds.has(post.id));
+const hasBody = Boolean(work.body?.trim());
+---
+
+<WorkLayout title={title} description={description}>
+    <nav class="work-breadcrumb" aria-label="パンくず">
+        <a href={worksUrl()}>Works</a><span aria-hidden="true"> / </span><span aria-current="page"
+            >{title}</span
+        >
+    </nav>
+    <article class="work-detail">
+        <header class="work-detail-header">
+            <p class="work-eyebrow">{workCategoryLabel(work)}{year ? ` / ${year}年` : ""}</p>
+            <h1>{title}</h1>
+            {
+                workSubcategoryLabel(work) && (
+                    <p class="work-subcategory">{workSubcategoryLabel(work)}</p>
+                )
+            }
+            {status && <p class="work-status">状況：{status}</p>}
+            <p class="work-detail-description">{description}</p>
+        </header>
+        <WorkMedia media={workMainMedia(work)} title={title} eager />
+        <div class="work-detail-content">
+            {
+                technologies.length > 0 && (
+                    <section>
+                        <>
+                            <h2>使用技術</h2>
+                            <ul class="work-technologies">
+                                {technologies.map((technology) => (
+                                    <li>{technology}</li>
+                                ))}
+                            </ul>
+                        </>
+                    </section>
+                )
+            }
+            {
+                features.length > 0 && (
+                    <section>
+                        <>
+                            <h2>主な機能・特徴</h2>
+                            <ul>
+                                {features.map((feature) => (
+                                    <li>{feature}</li>
+                                ))}
+                            </ul>
+                        </>
+                    </section>
+                )
+            }
+            <WorkGallery items={gallery.slice(1)} title={title} />
+            {
+                hasBody && (
+                    <div class="work-body">
+                        <Content />
+                    </div>
+                )
+            }
+            {
+                links.length > 0 && (
+                    <section>
+                        <>
+                            <h2>リンク</h2>
+                            <ul class="work-links">
+                                {links.map((link) => (
+                                    <li>
+                                        <ALink {...link} href={localUrl(link.href)} />
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    </section>
+                )
+            }
+            {
+                related.length > 0 && (
+                    <section class="work-related">
+                        <>
+                            <h2>関連するBlog記事</h2>
+                            <ul>
+                                {related.map((post) => (
+                                    <li>
+                                        <a href={postUrl(post)}>{post.data.title}</a>{" "}
+                                        <time datetime={post.data.pubDate.toISOString()}>
+                                            {formatBlogDate(post.data.pubDate)}
+                                        </time>
+                                    </li>
+                                ))}
+                            </ul>
+                        </>
+                    </section>
+                )
+            }
+            <footer class="work-detail-footer"><a href={worksUrl()}>← Works一覧へ戻る</a></footer>
+        </div>
+    </article>
+</WorkLayout>

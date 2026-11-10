@@ -1,3 +1,5 @@
+// 移行前のデータ。情報保持を検証するテスト用として残す。
+// 作品の追加・更新は src/content/works/*.md で行う。
 import type { Link, Project, ProjectMedia } from "../types/main.type";
 
 const image = (work: string, file: string, alt: string): ProjectMedia => ({ type: "image", src: `/works/${work}/${file}`, alt });
