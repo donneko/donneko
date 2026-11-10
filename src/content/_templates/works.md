@@ -1,0 +1,38 @@
+---
+title: "作品のタイトル"
+description: "作品の内容が伝わる短い概要に書き換えてください。"
+category: software
+# subcategory: web
+# 分かっている情報だけを設定します。
+# year: 2026
+# status: development
+# thumbnail: /works/my-project/preview.png
+# thumbnailAlt: "作品のプレビュー画面"
+gallery: []
+# gallery:
+#     - type: image
+#       src: /works/my-project/preview.png
+#       alt: "作品の画面"
+#     - type: video
+#       src: /works/my-project/demo.mp4
+#       alt: "操作デモ"
+#       poster: /works/my-project/poster.png
+technologies: []
+features: []
+links: []
+# links:
+#     github: "https://github.com/your-account/your-project"
+#     demo: "https://example.com/"
+# 表示順は小さい番号が先です。省略時は 999。
+order: 999
+featured: false
+featuredOrder: 999
+# 実在するBlogの記事IDだけを指定してください。
+relatedPosts: []
+# 公開するときだけ false に変更します。
+draft: true
+---
+
+## この作品について
+
+作品の詳しい紹介をここに書きます。短い作品は、この見出し以降の本文をすべて削除しても構いません。

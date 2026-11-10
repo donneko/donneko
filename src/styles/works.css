@@ -393,7 +393,7 @@
     margin-bottom: 28px;
 }
 
-.work-detail h1 {
+.work-detail-header h1 {
     margin: 12px 0;
     color: #10113f;
     font-size: clamp(1.6rem, 3vw, 2.1rem);
@@ -411,21 +411,16 @@
 }
 
 .work-detail-content > section,
-.work-body {
+.work-detail-content > .markdown-body {
     margin-top: 36px;
 }
 
-.work-detail h2 {
+.work-detail-content > section > h2 {
     margin: 1.8em 0 0.8em;
     border-bottom: 1px solid #777;
     padding-bottom: 5px;
     color: #10113f;
     font-size: 1.3rem;
-}
-
-.work-detail h3 {
-    color: #10113f;
-    font-size: 1.1rem;
 }
 
 .work-gallery {
@@ -439,64 +434,7 @@
     padding-top: 20px;
 }
 
-.work-body {
-    line-height: 1.9;
-}
-
-.work-body img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-    margin: 24px auto;
-}
-
-.work-body pre {
-    max-width: 100%;
-    overflow-x: auto;
-    border: 1px solid #777;
-    padding: 16px;
-    font-size: 0.9rem;
-}
-
-.work-body code {
-    font-family: Consolas, "BIZ UDGothic", monospace;
-}
-
-.work-body :not(pre) > code {
-    padding: 2px 4px;
-    background: #f0f2fa;
-}
-
-.work-body blockquote {
-    margin: 24px 0;
-    border-left: 4px solid #2233bb;
-    padding: 4px 16px;
-    background: #f4f6ff;
-}
-
-.work-body [role="region"] {
-    max-width: 100%;
-    overflow-x: auto;
-    margin: 24px 0;
-}
-
-.work-body table {
-    width: 100%;
-    border-collapse: collapse;
-    overflow-wrap: normal;
-}
-
-.work-body :is(th, td) {
-    border: 1px solid #111;
-    padding: 8px 12px;
-}
-
-.work-body th {
-    background: #2233bb;
-    color: #fff;
-}
-
-.works-page :focus-visible,
+.works-page :focus-visible:not(.markdown-body *),
 .work-lightbox :focus-visible {
     outline: 2px solid #ff7a00;
     outline-offset: -3px;

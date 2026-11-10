@@ -1,5 +1,8 @@
 # Worksの構成と運用
 
+メタ情報の一覧・初期値・書き方は [ContentのREADME](../src/content/README.md) にまとめています。
+記事の追加には [Worksテンプレート](../src/content/_templates/works.md) をコピーして使ってください。README・テンプレートは公開対象外です。
+
 Astro 7.2.2のContent Layer APIを使い、作品を `src/content/works/*.md` で管理します。
 静的HTMLを生成する構成です。依存パッケージ、GitHub Actions、公開先設定は変更していません。
 
@@ -27,7 +30,7 @@ Astro 7.2.2のContent Layer APIを使い、作品を `src/content/works/*.md` �
 以前は作品ごとのHTMLページがなかったため、今回は `/works/tyoi-server/` など69件の詳細ページを追加しています。
 画像・動画のファイルは移動・変更していません。
 
-元データ `src/data/projects.ts` は移行結果を照合するテスト用に残しています。実際のページからは参照しません。
+旧データからの移行は完了しており、現在は `src/content/works/*.md` が作品データの管理元です。
 作品の更新はMarkdownだけに行ってください。年・状態・使用技術・機能は、既存情報で確認できたものだけを設定し、不明な値は省略しています。
 
 ## 画面と操作
@@ -147,9 +150,9 @@ npm run test:works
 npm run test:blog
 ```
 
-`test:works` は一時プロジェクトを作ってビルドし、69件の移行照合、Featuredの順序・上限、下書き、本文なし・画像なし、Markdown、安全設定、関連Blog記事、サブパス、公開作品0件を検証します。
+`test:works` は一時プロジェクトを作ってビルドし、全作品のメタ情報・メディア・リンク、Featuredの順序・上限、下書き、本文なし・画像なし、Markdown、安全設定、関連Blog記事、サブパス、公開作品0件を検証します。
 元の記事や本番用の `dist/` は書き換えません。
-移行元の作品説明などを意図的に更新する場合は、移行照合テストの期待値も確認してください。新規作品の追加とFeatured設定の変更は、元69件の移行照合に影響しません。
+テストは現在のMarkdownの収集結果と生成ページを照合します。作品の追加やFeatured設定の変更にも対応します。
 
 ## 実装時の確認結果
 

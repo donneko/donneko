@@ -1,7 +1,7 @@
 // Astro 7に同梱されるSätteriの公式プラグインAPIを使う。追加パッケージは不要。
 /** @type {import("satteri").MdastPluginDefinition} */
 export const safeMarkdown = {
-    name: "safe-blog-markdown",
+    name: "safe-markdown",
     html(node, context) {
         context.removeNode(node);
     },
@@ -24,7 +24,7 @@ function restrictUrl(node, context) {
 
 /** @type {import("satteri").HastPluginDefinition} */
 export const accessibleMarkdown = {
-    name: "accessible-blog-markdown",
+    name: "accessible-markdown",
     element: [
         {
             filter: ["table"],
@@ -33,7 +33,7 @@ export const accessibleMarkdown = {
                     type: "element",
                     tagName: "div",
                     properties: {
-                        className: ["blog-table-scroll"],
+                        className: ["markdown-table-scroll"],
                         role: "region",
                         tabIndex: 0,
                         ariaLabel: "表（横スクロールできます）",

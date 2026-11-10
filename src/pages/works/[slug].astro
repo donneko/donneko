@@ -86,7 +86,7 @@ const hasBody = Boolean(work.body?.trim());
             <WorkGallery items={gallery.slice(1)} title={title} />
             {
                 hasBody && (
-                    <div class="work-body">
+                    <div class="markdown-body">
                         <Content />
                     </div>
                 )

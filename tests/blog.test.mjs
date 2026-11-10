@@ -60,7 +60,7 @@ function build(root, ...args) {
         process.execPath,
         [join(project, "node_modules/astro/bin/astro.mjs"), "build", "--root", root, ...args],
         {
-            cwd: project,
+            cwd: root,
             encoding: "utf8",
             env: { ...process.env, ASTRO_TELEMETRY_DISABLED: "1" },
             timeout: 60_000,
@@ -85,7 +85,7 @@ async function outputFiles(directory) {
     return children.flat();
 }
 
-test("21記事の並び順・ページ送り・下書き除外・タグ・Markdown・RSS", async (t) => {
+test("21記事の並び順・ページ送り・下書き除外・タグ・Markdown", async (t) => {
     const root = await createFixture(t);
     for (let number = 1; number <= 21; number++) {
         const suffix = String(number).padStart(2, "0");
@@ -185,7 +185,7 @@ const message: string = "sample";
     assert.match(article, /class="astro-code/);
     assert.match(article, /<span style="color:/);
     assert.match(article, /tabindex="0"/);
-    assert.match(article, /class="blog-table-scroll"/);
+    assert.match(article, /class="markdown-table-scroll"/);
     assert.match(article, /<blockquote>/);
     assert.match(article, /<img /);
     assert.match(article, /href="https:\/\/example.com\/"/);
@@ -209,12 +209,8 @@ const message: string = "sample";
         }
     }
 
-    const rss = await readFile(join(root, "dist/blog/rss.xml"), "utf8");
-    assert.equal((rss.match(/<item>/g) ?? []).length, 21);
-    assert.match(rss, /検証 &lt;タイトル&gt; &amp; RSS/);
-    assert.match(rss, /https:\/\/donneko.github.io\/blog\/post-01\//);
-    assert.doesNotMatch(rss, /DRAFT_SECRET_/);
-    assert.ok(rss.indexOf("/post-01/") < rss.indexOf("/post-21/"));
+    // RSSは削除済み。公開機能を追加し直していないことも確認する。
+    await assert.rejects(readFile(join(root, "dist/blog/rss.xml")), { code: "ENOENT" });
 });
 
 test("記事0件と下書きだけのブログを正常に生成する", async (t) => {
@@ -229,7 +225,6 @@ test("記事0件と下書きだけのブログを正常に生成する", async (
         assert.equal(postLinks(source).length, 0);
         const files = await outputFiles(join(root, "dist/blog"));
         assert.equal(files.filter((file) => file.endsWith(".html")).length, 5);
-        assert.doesNotMatch(await readFile(join(root, "dist/blog/rss.xml"), "utf8"), /<item>/);
     }
 });
 
@@ -242,8 +237,4 @@ test("base付きでもブログが同じ公開パスにリンクする", async (
     assert.match(source, /href="\/example\/blog\/base-sample\/"/);
     assert.match(source, /href="\/example\/blog\/categories\/development\/"/);
     assert.match(source, /href="\/example\/blog\/tags\/Astro\/"/);
-    assert.match(
-        await readFile(join(root, "dist/blog/rss.xml"), "utf8"),
-        /https:\/\/donneko.github.io\/example\/blog\//
-    );
 });

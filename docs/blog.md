@@ -1,5 +1,8 @@
 # 技術ブログの運用
 
+メタ情報の一覧・初期値・書き方は [ContentのREADME](../src/content/README.md) にまとめています。
+記事の追加には [Blogテンプレート](../src/content/_templates/blog.md) をコピーして使ってください。README・テンプレートは公開対象外です。
+
 既存のAstro 7.2.2 / SSG構成にContent Layer API（`glob`、`getCollection`、`render`）を追加しています。
 記事は `src/content/blog/` 直下の `.md` のみです。CMS・DB・認証・投稿APIはありません。
 追加のnpmパッケージは使用していません。Markdownの安全設定には、既存のAstro依存に含まれる `@astrojs/markdown-satteri` を使用します。
@@ -11,7 +14,7 @@
 ````markdown
 ---
 title: "記事タイトル"
-description: "記事の概要。記事一覧とmeta description、RSSで使います。"
+description: "記事の概要。記事一覧とmeta descriptionで使います。"
 pubDate: 2026-11-09
 updatedDate: 2026-11-10
 category: development
@@ -30,7 +33,7 @@ const message = "サンプル";
 
 - `title`、`description`、`pubDate`、`category` は必須です。
 - `updatedDate` と `tags` は省略できます。`draft` の省略時は `false` です。
-- `draft: true` の記事は開発時も含めて一覧・個別ページ・カテゴリ・タグ・RSSから除外します。プレビューする場合はローカルで一時的に `false` にし、公開前に戻してください。
+- `draft: true` の記事は開発時も含めて一覧・個別ページ・カテゴリ・タグから除外します。プレビューする場合はローカルで一時的に `false` にし、公開前に戻してください。
 - `pubDate` は予約投稿の指定ではありません。未来の日付でも `draft: false` なら公開されます。
 - 日付は `YYYY-MM-DD` を推奨します。表示は日本語・日本時間です。
 - ファイル名がそのままURLのslugになります。英小文字で始まる `my-first-post.md` のようなkebab-caseを使用してください。数字だけの名前と `categories.md`、`tags.md` は使用できません。
@@ -66,11 +69,12 @@ const message = "サンプル";
 - `/blog/my-first-post/`：記事詳細。
 - `/blog/categories/development/`：カテゴリ別の全記事（新しい順）。
 - `/blog/tags/Astro/`：タグ別の全記事（新しい順）。
-- `/blog/rss.xml`：公開記事のタイトル・概要・URL・公開日を出力する静的RSSです。本文は含めません。
+
+現在のサイトにはRSSの生成・配信はありません。
 
 既存設定は `site: "https://donneko.github.io"`、`base` 未指定のルート配信です。既存ページもルート相対リンクを使っています。
 GitHub Actionsは引き続きNode.js 22で `npm ci` → `npm run build` → `dist/` をGitHub Pagesへ公開します。
-独自ドメイン `donneko.net` への実際のDNS・Pages設定はこのリポジトリだけでは確認できません。実際の公開先が独自ドメインなら、RSSの絶対URLに使う `site` も運用設定に合わせてください。
+独自ドメイン `donneko.net` への実際のDNS・Pages設定はこのリポジトリだけでは確認できません。実際の公開先が独自ドメインなら、`site` も運用設定に合わせてください。
 ブログの自動生成リンクは `BASE_URL` に対応していますが、将来サイト全体をサブパスに移す場合は既存ページのルート相対リンクも確認する必要があります。
 
 Worksは制作物紹介、Blogは開発過程・設計・検証・トラブルシューティング、Diaryは既存の外部日記への案内です。
@@ -87,7 +91,7 @@ npm run preview
 npm run test:blog
 ```
 
-`test:blog` は一時ディレクトリに検証用プロジェクトを作り、実際の静的ビルドでページ送り、並び順、空の一覧、下書き除外、タグのURL、生HTML・危険なリンクの除外、RSSを確認します。
+`test:blog` は一時ディレクトリに検証用プロジェクトを作り、実際の静的ビルドでページ送り、並び順、空の一覧、下書き除外、タグのURL、生HTML・危険なリンクの除外を確認します。
 運用記事や本番の `dist/` は書き換えません。
 ブラウザではデスクトップと狭い画面で、コード・表の横スクロール、キーボードフォーカス、画像と既存ページも確認してください。
 
@@ -119,7 +123,6 @@ npm run test:blog
 - `src/pages/blog/[slug].astro`：記事詳細。
 - `src/pages/blog/categories/[category].astro`：カテゴリ別一覧。
 - `src/pages/blog/tags/[tag].astro`：タグ別一覧。
-- `src/pages/blog/rss.xml.ts`：静的RSS。
 - `src/styles/blog.css`：ブログに限定したスタイル。
 - `tests/blog.test.mjs`：一時プロジェクトでのビルド検証。
 - `docs/blog.md`：この運用ガイド。

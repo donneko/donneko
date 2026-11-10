@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { Buffer } from "node:buffer";
 import { spawnSync } from "node:child_process";
 import {
     cp,
@@ -17,20 +16,8 @@ import { join } from "node:path";
 import process from "node:process";
 import { fileURLToPath, URL } from "node:url";
 import test from "node:test";
-import ts from "typescript";
 
 const project = fileURLToPath(new URL("../", import.meta.url));
-const groups = {
-    npm: "software",
-    web: "software",
-    program: "software",
-    hardware: "hardware",
-    design: "design",
-    illustration: "design",
-    "3d": "visual",
-    game: "visual",
-    video: "visual",
-};
 
 async function fixture(t) {
     const root = await realpath(await mkdtemp(join(tmpdir(), "donneko-works-test-")));
@@ -57,7 +44,7 @@ function build(root, ...args) {
         process.execPath,
         [join(project, "node_modules/astro/bin/astro.mjs"), "build", "--root", root, ...args],
         {
-            cwd: project,
+            cwd: root,
             encoding: "utf8",
             env: { ...process.env, ASTRO_TELEMETRY_DISABLED: "1" },
             timeout: 60_000,
@@ -83,33 +70,15 @@ const featuredLinks = (source) =>
 const escapeHtml = (text) =>
     text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
-test("69件の作品・103件のメディア・13件のリンクと元分類をすべて保持する", async (t) => {
+test("全作品のメタ情報・メディア・リンクを静的ページに保持する", async (t) => {
     const root = await fixture(t);
-    const legacySource = await readFile(join(project, "src/data/projects.ts"), "utf8");
-    const compiled = ts.transpileModule(legacySource, {
-        compilerOptions: { module: ts.ModuleKind.ESNext },
-    }).outputText;
-    const { projects } = await import(
-        `data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`
-    );
+    const sourceIds = (await readdir(join(root, "src/content/works")))
+        .filter((name) => name.endsWith(".md"))
+        .map((name) => name.slice(0, -3));
     build(root);
     const works = JSON.parse(await readFile(join(root, "dist/verify-works.json"), "utf8"));
-    assert.equal(projects.length, 69);
-    // 新規作品の追加やFeatured設定の変更を妨げず、元69件の移行を照合する。
-    assert.ok(works.length >= projects.length);
-    const originalIds = new Set(projects.map((work) => work.media[0].src.split("/")[2]));
-    const migrated = works.filter((work) => originalIds.has(work.id));
-    const published = works.filter((work) => !work.data.draft);
-    assert.equal(migrated.length, 69);
-    assert.equal(
-        migrated.reduce((total, work) => total + work.data.gallery.length, 0),
-        103
-    );
-    assert.equal(
-        migrated.reduce((total, work) => total + work.data.links.length, 0),
-        13
-    );
-    const entries = new Map(works.map((work) => [work.id, work]));
+    assert.deepEqual(works.map(({ id }) => id).sort(), sourceIds.sort());
+    const published = works.filter(({ data }) => !data.draft);
     const index = await html(root);
     assert.equal([...index.matchAll(/<li\b[^>]*data-work-row\b/g)].length, published.length);
     assert.equal(
@@ -119,40 +88,32 @@ test("69件の作品・103件のメディア・13件のリンクと元分類を�
     for (const href of featuredLinks(index)) {
         assert.ok(published.some((work) => href === `/works/${work.id}/`));
     }
-    assert.doesNotMatch(index, /class="work-body"/);
-
-    for (const [position, original] of projects.entries()) {
-        const id = original.media[0].src.split("/")[2];
-        const work = entries.get(id);
-        assert.ok(work, `移行漏れ: ${original.title}`);
-        assert.equal(work.data.title, original.title);
-        assert.equal(work.data.description, original.description);
-        assert.equal(work.data.subcategory, original.category);
-        assert.equal(work.data.category, groups[original.category]);
-        assert.equal(work.data.order, position + 1);
-        assert.deepEqual(work.data.gallery, original.media);
-        assert.deepEqual(work.data.links, original.links ?? []);
+    assert.doesNotMatch(index, /class="markdown-body"/);
+    for (const work of works) {
         if (work.data.draft) {
-            await assert.rejects(html(root, id), { code: "ENOENT" });
+            await assert.rejects(html(root, work.id), { code: "ENOENT" });
             continue;
         }
-        const page = await html(root, id);
-        assert.ok(page.includes(escapeHtml(original.title)));
-        assert.ok(page.includes(escapeHtml(original.description)));
-        for (const media of original.media) {
-            assert.ok(page.includes(media.src), `メディア欠落: ${id} → ${media.src}`);
-            await assert.doesNotReject(readFile(join(project, "public", media.src)));
+        const page = await html(root, work.id);
+        assert.ok(page.includes(escapeHtml(work.data.title)));
+        assert.ok(page.includes(escapeHtml(work.data.description)));
+        for (const media of work.data.gallery) {
+            assert.ok(
+                page.includes(escapeHtml(media.src)),
+                `メディア欠落: ${work.id} → ${media.src}`
+            );
+            if (media.src.startsWith("/")) {
+                await assert.doesNotReject(readFile(join(project, "public", media.src)));
+            }
         }
-        for (const link of original.links ?? []) {
-            assert.ok(page.includes(link.href), `リンク欠落: ${id} → ${link.href}`);
+        for (const link of work.data.links) {
+            assert.ok(
+                page.includes(escapeHtml(link.href)),
+                `リンク欠落: ${work.id} → ${link.href}`
+            );
             assert.ok(page.includes(escapeHtml(link.label)));
         }
     }
-    const categoryCounts = migrated.reduce((counts, work) => {
-        counts[work.data.category] = (counts[work.data.category] ?? 0) + 1;
-        return counts;
-    }, {});
-    assert.deepEqual(categoryCounts, { software: 22, visual: 23, hardware: 1, design: 23 });
 });
 
 test("Featured順序と上限・下書き除外・省略値・Markdown・公開Blogとの関連・baseパス", async (t) => {
@@ -190,7 +151,7 @@ test("Featured順序と上限・下書き除外・省略値・Markdown・公開B
             ],
             links: { github: "https://github.com/donneko/", demo: "/works/plain/" },
         },
-        "## 本文だけの見出し\n\nMarkdown本文の検証です。\n\n~~~ts\nconst value: number = 1;\n~~~\n\n<script>WORK_SCRIPT_EXECUTED</script>\n\n[x](javascript:alert%281%29)"
+        "## 本文だけの見出し\n\nMarkdown本文の検証です。\n\n~~~ts\nconst value: number = 1;\n~~~\n\n| 項目 | 内容 |\n| --- | --- |\n| 表 | 検証 |\n\n> 引用の検証\n\n<script>WORK_SCRIPT_EXECUTED</script>\n\n[x](javascript:alert%281%29)"
     );
     build(root);
     const index = await html(root);
@@ -202,13 +163,16 @@ test("Featured順序と上限・下書き除外・省略値・Markdown・公開B
     assert.match(plain, /画像はまだありません/);
     assert.doesNotMatch(
         plain,
-        /class="work-body"|<h2>使用技術|<h2>主な機能|id="work-gallery-heading"|関連するBlog記事|状況：/
+        /class="markdown-body"|<h2>使用技術|<h2>主な機能|id="work-gallery-heading"|関連するBlog記事|状況：/
     );
     const body = await html(root, "body");
     assert.match(body, /2026年/);
     assert.match(body, /状況：development/);
     assert.match(body, /本文だけの見出し/);
     assert.match(body, /class="astro-code/);
+    assert.match(body, /class="markdown-body"/);
+    assert.match(body, /class="markdown-table-scroll"/);
+    assert.match(body, /<blockquote>/);
     assert.match(body, /id="work-gallery-heading"/);
     assert.match(body, /href="\/blog\/sample-markdown\/"/);
     assert.doesNotMatch(
@@ -254,4 +218,98 @@ test("公開作品0件でもFeaturedと一覧・詳細を安全に生成する",
         (await readdir(join(root, "dist/works"))).filter((file) => file === "private-only"),
         []
     );
+});
+
+test("README・コピー元は公開せず、両テンプレートはコピー後に有効な下書きとして扱う", async (t) => {
+    const root = await fixture(t);
+    const workIds = (await readdir(join(root, "src/content/works")))
+        .filter((name) => name.endsWith(".md"))
+        .map((name) => name.slice(0, -3));
+    const blogIds = (await readdir(join(root, "src/content/blog")))
+        .filter((name) => name.endsWith(".md"))
+        .map((name) => name.slice(0, -3));
+    for (const collection of ["blog", "works"]) {
+        await cp(
+            join(project, `src/content/_templates/${collection}.md`),
+            join(root, `src/content/${collection}/template-check.md`)
+        );
+        // コピー元のdraftを外しても収集対象外であることを検証する。
+        const templatePath = join(root, `src/content/_templates/${collection}.md`);
+        const template = await readFile(templatePath, "utf8");
+        await writeFile(
+            templatePath,
+            template
+                .replace(
+                    /^title:.*$/m,
+                    `title: "OUTSIDE_${collection.toUpperCase()}_TEMPLATE_SENTINEL"`
+                )
+                .replace(/^draft: true$/m, "draft: false")
+        );
+    }
+    await writeFile(join(root, "src/content/README.md"), "# CONTENT_README_DO_NOT_PUBLISH\n");
+    await writeFile(
+        join(root, "src/pages/verify-blog.json.ts"),
+        'import {getCollection} from "astro:content"; export const GET = async () => new Response(JSON.stringify(await getCollection("blog")));'
+    );
+
+    const assertInternalFilesExcluded = async () => {
+        const files = await readdir(join(root, "dist"), { recursive: true });
+        assert.ok(!files.some((name) => /(?:^|\/)(?:README\.md|_templates)(?:\/|$)/i.test(name)));
+        for (const name of files.filter((name) => /\.(?:html|xml)$/.test(name))) {
+            assert.doesNotMatch(
+                await readFile(join(root, "dist", name), "utf8"),
+                /CONTENT_README_DO_NOT_PUBLISH|OUTSIDE_(?:BLOG|WORKS)_TEMPLATE_SENTINEL/
+            );
+        }
+    };
+
+    build(root);
+    const works = JSON.parse(await readFile(join(root, "dist/verify-works.json"), "utf8"));
+    const posts = JSON.parse(await readFile(join(root, "dist/verify-blog.json"), "utf8"));
+    assert.deepEqual(works.map(({ id }) => id).sort(), [...workIds, "template-check"].sort());
+    assert.deepEqual(posts.map(({ id }) => id).sort(), [...blogIds, "template-check"].sort());
+    assert.equal(works.find(({ id }) => id === "template-check").data.draft, true);
+    assert.equal(posts.find(({ id }) => id === "template-check").data.draft, true);
+    const publicWorks = works.filter(({ data }) => !data.draft).length;
+    const publicPosts = posts.filter(({ data }) => !data.draft).length;
+    assert.equal(
+        [...(await html(root)).matchAll(/<li\b[^>]*data-work-row\b/g)].length,
+        publicWorks
+    );
+    const blog = await readFile(join(root, "dist/blog/index.html"), "utf8");
+    assert.ok(blog.includes(`全${publicPosts}件`));
+    await assert.rejects(html(root, "template-check"), { code: "ENOENT" });
+    await assert.rejects(readFile(join(root, "dist/blog/template-check/index.html")), {
+        code: "ENOENT",
+    });
+    await assert.rejects(readFile(join(root, "dist/blog/rss.xml")), { code: "ENOENT" });
+    const postTitle = posts.find(({ id }) => id === "template-check").data.title;
+    const workTitle = works.find(({ id }) => id === "template-check").data.title;
+    assert.ok(!blog.includes(postTitle));
+    assert.ok(!(await html(root)).includes(workTitle));
+    await assertInternalFilesExcluded();
+
+    // draftを外せば、テンプレートから通常の記事・作品ページを生成できる。
+    for (const collection of ["blog", "works"]) {
+        const path = join(root, `src/content/${collection}/template-check.md`);
+        await writeFile(
+            path,
+            (await readFile(path, "utf8")).replace(/^draft: true$/m, "draft: false")
+        );
+    }
+    build(root);
+    assert.match(await html(root, "template-check"), /class="markdown-body"/);
+    const publishedBlog = await readFile(join(root, "dist/blog/template-check/index.html"), "utf8");
+    assert.match(publishedBlog, /class="markdown-body"/);
+    assert.ok(publishedBlog.includes(postTitle));
+    assert.equal(
+        [...(await html(root)).matchAll(/<li\b[^>]*data-work-row\b/g)].length,
+        publicWorks + 1
+    );
+    assert.ok(
+        (await readFile(join(root, "dist/blog/index.html"), "utf8")).includes(
+            `全${publicPosts + 1}件`
+        )
+    );
+    await assertInternalFilesExcluded();
 });
