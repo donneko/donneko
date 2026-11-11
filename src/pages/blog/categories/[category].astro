@@ -22,7 +22,7 @@ const { category, posts } = Astro.props;
 const { label, description } = blogCategories[category];
 ---
 
-<BlogLayout title={`${label}の記事`} description={`${description}に関する技術ブログの記事一覧。`}>
+<BlogLayout title={`${label}の記事`} description={`${description}に関するブログの記事一覧。`}>
     <h1 class="page-title">{label}</h1>
     <p>{description}の記事一覧（{posts.length}件）</p>
     <PostList posts={posts} />

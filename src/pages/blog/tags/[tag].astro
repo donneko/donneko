@@ -21,7 +21,7 @@ interface Props {
 const { tag, posts } = Astro.props;
 ---
 
-<BlogLayout title={`#${tag}の記事`} description={`「${tag}」タグの付いた技術ブログの記事一覧。`}>
+<BlogLayout title={`#${tag}の記事`} description={`「${tag}」タグの付いたブログの記事一覧。`}>
     <h1 class="page-title">#{tag}</h1>
     <p>「{tag}」の記事一覧（{posts.length}件）</p>
     <PostList posts={posts} />

@@ -24,16 +24,18 @@ import { news } from "../data/news.ts";
 　　％％　　　　　　　　　　　％％
 　　　％％％％％％％％％％％％％</pre>
             <Panel title="最近のニュース">
-                <ul class="news-list">
-                    {
-                        news.map(([date, text]) => (
-                            <li>
-                                <time>{date}</time>
-                                <span>{text}</span>
-                            </li>
-                        ))
-                    }
-                </ul>
+                <div class="news-box">
+                    <ul class="news-list">
+                        {
+                            news.map(([date, text]) => (
+                                <li>
+                                    <time>{date}</time>
+                                    <span>{text}</span>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
             </Panel>
         </div>
 
@@ -48,17 +50,12 @@ import { news } from "../data/news.ts";
                         ></tr
                     >
                     <tr
-                        ><td><a href="/works/">作品</a></td><td
+                        ><td><a href="/works/">作品について</a></td><td
                             >作った作品について書かれてるよ！！</td
                         ></tr
                     >
                     <tr
-                        ><td><a href="/blog/">技術ブログ</a></td><td
-                            >開発記録や技術についてまとめているよ！！</td
-                        ></tr
-                    >
-                    <tr
-                        ><td><a href="/diary/">日記だよ</a></td><td
+                        ><td><a href="/blog/">ブログとか</a></td><td
                             >思ったことについて適当に書くよ！！</td
                         ></tr
                     >
@@ -111,6 +108,10 @@ import { news } from "../data/news.ts";
         font-family: monospace;
         font-size: clamp(10px, 1.5vw, 15px);
         line-height: 1.45;
+    }
+    .news-box {
+        height: 15em;
+        overflow-y: auto;
     }
     .news-list {
         display: grid;

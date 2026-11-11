@@ -18,10 +18,10 @@ const pageUrl = (number: number) => blogUrl(number === 1 ? "" : `${number}/`);
 ---
 
 <BlogLayout
-    title={page.currentPage === 1 ? "技術ブログ" : `技術ブログ（${page.currentPage}ページ目）`}
-    description={`開発記録、技術解説、設計上の判断や実験の記録をまとめた技術ブログ。${page.currentPage}ページ目。`}
+    title={page.currentPage === 1 ? "ブログ" : `ブログ（${page.currentPage}ページ目）`}
+    description={`開発記録、技術解説、設計上の判断や実験の記録をまとめたブログ。${page.currentPage}ページ目。`}
 >
-    <h1 class="page-title">技術ブログ</h1>
+    <h1 class="page-title">ブログ</h1>
     <TextBox>
         <p class="blog-intro">
             開発の過程や技術についての記録です。制作物の紹介は<a href="/works/">Works</a>へ。
