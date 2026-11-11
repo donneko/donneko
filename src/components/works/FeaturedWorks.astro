@@ -13,8 +13,7 @@ const featured = getFeaturedWorks(Astro.props.works);
     featured.length > 0 && (
         <section class="featured-section" aria-labelledby="featured-heading">
             <div class="works-section-heading">
-                <h2 id="featured-heading">Featured Projects</h2>
-                <p>ピックアップした作品</p>
+                <h2 id="featured-heading">注目の作品</h2>
             </div>
             <div class:list={["featured-grid", { "featured-single": featured.length === 1 }]}>
                 {featured.map((work, index) => (

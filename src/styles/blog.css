@@ -12,13 +12,21 @@
     align-items: baseline;
     gap: 8px 20px;
 }
+.blog-page .page-title {
+    margin: 0 0 12px;
+}
 
 .blog-navigation {
     margin-bottom: 24px;
 }
 
 .blog-intro {
-    margin-bottom: 24px;
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.blog-total {
+    margin: 60px 0 5px 0;
 }
 
 .post-list {
@@ -82,7 +90,7 @@
 }
 
 .blog-categories {
-    margin-top: 40px;
+    margin-top: 60px;
     border: 1px solid #111;
     padding: 1px;
     background: #fff;

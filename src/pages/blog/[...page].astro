@@ -3,6 +3,7 @@ import type { GetStaticPaths, Page } from "astro";
 import BlogLayout from "../../layouts/BlogLayout.astro";
 import PostList from "../../components/blog/PostList.astro";
 import { blogUrl, getPublishedPosts, type BlogPost } from "../../lib/blog";
+import TextBox from "../../components/TextBox.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
     return paginate(await getPublishedPosts(), { pageSize: 10 });
@@ -21,10 +22,13 @@ const pageUrl = (number: number) => blogUrl(number === 1 ? "" : `${number}/`);
     description={`開発記録、技術解説、設計上の判断や実験の記録をまとめた技術ブログ。${page.currentPage}ページ目。`}
 >
     <h1 class="page-title">技術ブログ</h1>
-    <p class="blog-intro">
-        開発の過程や技術についての記録です。制作物の紹介は<a href="/works/">Works</a>へ。
-    </p>
-    <p>全{page.total}件</p>
+    <TextBox>
+        <p class="blog-intro">
+            開発の過程や技術についての記録です。制作物の紹介は<a href="/works/">Works</a>へ。
+        </p>
+    </TextBox>
+
+    <p class="blog-total">全{page.total}件</p>
     <PostList posts={page.data} />
     {
         page.lastPage > 1 && (

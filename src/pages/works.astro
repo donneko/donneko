@@ -2,21 +2,26 @@
 import WorkLayout from "../layouts/WorkLayout.astro";
 import FeaturedWorks from "../components/works/FeaturedWorks.astro";
 import ProjectExplorer from "../components/works/ProjectExplorer.astro";
+import TextBox from "../components/TextBox.astro";
 import { getPublishedWorks, localUrl } from "../lib/works";
 
 const works = await getPublishedWorks();
 ---
 
 <WorkLayout
-    title="Works"
+    title="作品について"
     description="Web・プログラム、デザイン、3D、電子工作など、丼猫の作品を探索できるポートフォリオ。"
 >
     <header class="works-page-header">
-        <h1 class="page-title">Works</h1>
-        <p>Web・プログラムからグラフィック、3D、電子工作まで。作品の画面と概要をまとめています。</p>
-        <p class="works-role-note">
-            開発の過程や技術的な記録は<a href={localUrl("/blog/")}>Blog</a>へ。
-        </p>
+        <h1 class="page-title">作品について</h1>
+        <TextBox>
+            <p class="works-page-note">
+                Web・プログラムからグラフィック、3D、電子工作まで。作品の画面と概要をまとめています。
+            </p>
+            <p class="works-page-note">
+                開発の過程や技術的な記録は<a href={localUrl("/blog/")}>Blog</a>へ。
+            </p>
+        </TextBox>
     </header>
     <FeaturedWorks works={works} />
     <ProjectExplorer works={works} />
