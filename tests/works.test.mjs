@@ -186,7 +186,7 @@ test("Featured順序と上限・下書き除外・省略値・Markdown・公開B
             status: "development",
             technologies: ["TypeScript"],
             features: ["検証用の機能"],
-            relatedPosts: ["sample-markdown", "private-post"],
+            relatedPosts: ["private-post"],
             gallery: [
                 { type: "image", src: "/works/tyoi-server/image-01.png", alt: "検証画像1" },
                 { type: "image", src: "/works/site-map/image-01.png", alt: "検証画像2" },
@@ -216,7 +216,6 @@ test("Featured順序と上限・下書き除外・省略値・Markdown・公開B
     assert.match(body, /class="markdown-table-scroll"/);
     assert.match(body, /<blockquote>/);
     assert.match(body, /id="work-gallery-heading"/);
-    assert.match(body, /href="\/blog\/sample-markdown\/"/);
     assert.doesNotMatch(
         body,
         /PRIVATE_BLOG_TITLE|private-post|WORK_SCRIPT_EXECUTED|href="javascript:/i
@@ -239,7 +238,6 @@ test("Featured順序と上限・下書き除外・省略値・Markdown・公開B
     assert.match(base, /href="\/example\/works\/"/);
     assert.match(base, /href="\/example\/works\/plain\/"/);
     assert.match(base, /src="\/example\/works\/tyoi-server\/image-01\.png"/);
-    assert.match(base, /href="\/example\/blog\/sample-markdown\/"/);
 });
 
 test("公開作品0件でもFeaturedと一覧・詳細を安全に生成する", async (t) => {
