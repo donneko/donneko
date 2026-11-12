@@ -114,6 +114,7 @@
 .blog-empty {
     padding: 20px;
     border: 1px solid #111;
+    box-shadow: 3px 3px 0 rgb(0 0 0 / 20%);
     background: #fff;
 }
 
