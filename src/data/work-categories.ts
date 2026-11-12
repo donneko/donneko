@@ -1,11 +1,11 @@
 export const workCategories = {
-    software: "Software",
-    hardware: "Hardware",
-    design: "Design",
-    visual: "3D / Game / Video",
+    software: "ソフトウェア",
+    hardware: "ハードウェア",
+    design: "デザイン",
+    others: "その他",
 } as const;
 
-export const workCategoryIds = ["software", "hardware", "design", "visual"] as const;
+export const workCategoryIds = ["software", "hardware", "design", "others"] as const;
 
 // 以前の9分類はsubcategoryとして保持する。
 export const workSubcategories = {
