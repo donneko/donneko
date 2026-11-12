@@ -4,11 +4,11 @@ description: C言語で作った、難易度を選んで遊べる数当てゲー
 category: software
 subcategory: program
 order: 29
-thumbnail: /works/number-guessing-game/gameplay.jpg
+thumbnail: /works/number-guessing-game/image-01.jpg
 thumbnailAlt: ゲーム画面
 gallery:
     - type: image
-      src: /works/number-guessing-game/gameplay.jpg
+      src: /works/number-guessing-game/image-01.jpg
       alt: ゲーム画面
 technologies:
     - C

@@ -20,4 +20,5 @@ export const workSubcategories = {
     video: "動画",
     experimental: "実験的",
     arduino: "Arduino",
+    others: "その他",
 } as const;

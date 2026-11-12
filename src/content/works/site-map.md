@@ -4,16 +4,19 @@ description: サイトマップを扱うために作っている npm パッケ�
 category: software
 subcategory: npm
 order: 4
-thumbnail: /works/site-map/logo.png
+thumbnail: /works/site-map/image-01.png
 thumbnailAlt: site-map のロゴ
 gallery:
     - type: image
-      src: /works/site-map/logo.png
+      src: /works/site-map/image-01.png
       alt: site-map のロゴ
     - type: image
-      src: /works/site-map/json-output.png
+      src: /works/site-map/image-02.png
       alt: site-map のJSON出力
-technologies: []
+technologies:
+    - TypeScript
+    - Node.js
+    - npm
 features: []
 links:
     - href: https://www.npmjs.com/package/@donneko/site-map

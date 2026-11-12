@@ -4,11 +4,11 @@ description: Node.js / TypeScript 向けに作っている CLI ツール。
 category: software
 subcategory: npm
 order: 3
-thumbnail: /works/tyoi-cli/terminal-output.png
+thumbnail: /works/tyoi-cli/image-01.png
 thumbnailAlt: tyoi-cli の起動画面
 gallery:
     - type: image
-      src: /works/tyoi-cli/terminal-output.png
+      src: /works/tyoi-cli/image-01.png
       alt: tyoi-cli の起動画面
 technologies:
     - Node.js

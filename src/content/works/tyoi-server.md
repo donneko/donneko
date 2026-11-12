@@ -4,14 +4,14 @@ description: 小さなAPIサーバーや静的ファイルサーバーを簡単�
 category: software
 subcategory: npm
 order: 1
-thumbnail: /works/tyoi-server/terminal-output.png
+thumbnail: /works/tyoi-server/image-01.png
 thumbnailAlt: tyoi-server の起動画面
 gallery:
     - type: image
-      src: /works/tyoi-server/terminal-output.png
+      src: /works/tyoi-server/image-01.png
       alt: tyoi-server の起動画面
     - type: image
-      src: /works/node-server/terminal-output.jpg
+      src: /works/tyoi-server/image-02.jpg
       alt: 自作Webサーバーの実行画面
 technologies:
     - Node.js
@@ -27,7 +27,7 @@ links:
       label: GitHub でリポジトリをみる
       external: true
 featured: true
-featuredOrder: 1
+featuredOrder: 2
 draft: false
 ---
 

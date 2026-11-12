@@ -8,17 +8,18 @@ subcategory: []
 # 分かっている情報だけを設定します。
 # year: 2026
 # status: development
-# thumbnail: /works/my-project/preview.png
+# 画像は image-01.png、動画は video-01.mp4 のように種類ごとの連番にします。
+# thumbnail: /works/my-project/image-01.png
 # thumbnailAlt: "作品のプレビュー画面"
 gallery: []
 # gallery:
 #     - type: image
-#       src: /works/my-project/preview.png
+#       src: /works/my-project/image-01.png
 #       alt: "作品の画面"
 #     - type: video
-#       src: /works/my-project/demo.mp4
+#       src: /works/my-project/video-01.mp4
 #       alt: "操作デモ"
-#       poster: /works/my-project/poster.png
+#       poster: /works/my-project/image-02.png
 technologies: []
 features: []
 links: []

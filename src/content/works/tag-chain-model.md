@@ -6,13 +6,16 @@ subcategory:
     - experimental
     - program
 order: 8
-thumbnail: /works/tag-chain-model/result.png
+thumbnail: /works/tag-chain-model/image-01.png
 thumbnailAlt: タグ連鎖モデルの実行結果
 gallery:
     - type: image
-      src: /works/tag-chain-model/result.png
+      src: /works/tag-chain-model/image-01.png
       alt: タグ連鎖モデルの実行結果
-technologies: []
+technologies:
+    - javascript
+    - html
+    - node.js
 features: []
 links: []
 featured: false

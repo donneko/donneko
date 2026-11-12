@@ -26,6 +26,7 @@ export const languages = [
     ],
     ["Lua", "Stormworksでマイコン作るときに使ったやつ。閉じるのがendなのが面白かった。"],
     ["C言語", "C#とOS自作をしたいと考えて、ならC言語始めるか？で始めたやつ。全然できない（泣）"],
+    ["Python", "画像の編集のために使用。JSみたいなフロー関数がなくてちょっと大変だった。"],
 ];
 
 export const history = [

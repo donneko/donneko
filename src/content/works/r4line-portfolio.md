@@ -4,16 +4,20 @@ description: 3D 表現を使った架空のビジュアルポートフォリオ�
 category: software
 subcategory: web
 order: 5
-thumbnail: /works/r4line-portfolio/preview.png
+thumbnail: /works/r4line-portfolio/image-01.png
 thumbnailAlt: RΛLINE の画面
 gallery:
     - type: image
-      src: /works/r4line-portfolio/preview.png
+      src: /works/r4line-portfolio/image-01.png
       alt: RΛLINE の画面
     - type: image
-      src: /works/r4line-portfolio/logo-sheet.jpg
-      alt: RΛLINE のロゴ素材
-technologies: []
+      src: /works/r4line-portfolio/image-02.jpg
+      alt: 使用した素材
+technologies:
+    - JavaScript
+    - CSS
+    - HTML
+    - Canva
 features:
     - 3D表現を使った架空のビジュアルポートフォリオ
 links:
@@ -21,7 +25,7 @@ links:
       label: ウェブサイトをみる
       external: true
 featured: true
-featuredOrder: 2
+featuredOrder: 1
 draft: false
 ---
 

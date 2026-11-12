@@ -6,7 +6,13 @@
 Astro 7.2.2のContent Layer APIを使い、作品を `src/content/works/*.md` で管理します。
 静的HTMLを生成する構成です。依存パッケージ、GitHub Actions、公開先設定は変更していません。
 
-## 移行結果
+## 現在のファイル構成
+
+現在の作品数は39件です。作品名に合わせてMarkdown24件を改名し、使用中の画像・動画96件を対応する作品IDのフォルダへ集約しました。未使用メディア7件は削除しています。
+メディア名は `image-01.jpg`・`video-01.mp4` の形式です。作品詳細・メディアの旧URLへの転送はありません。
+改名対応表・削除一覧は [メディア監査](works-media-audit.md) を参照してください。
+
+## 初回移行時の記録
 
 既存の69作品を69件のMarkdownへ移行しました。タイトル・概要・元カテゴリ・メディアの順序・代替テキスト・リンクのURLとラベルは保持しています。
 
@@ -26,9 +32,9 @@ Astro 7.2.2のContent Layer APIを使い、作品を `src/content/works/*.md` �
 | `design` | Design | design・illustration | 23 |
 | `visual` | 3D / Game / Video | 3d・game・video | 23 |
 
-作品のslugには、既存メディアのディレクトリ名を使用しています。`/works/` と全画像・動画の公開パスは変わりません。
+初回移行時は、作品のslugに既存メディアのディレクトリ名を使用し、`/works/` と全画像・動画の公開パスを維持しました。その後の整理で、作品詳細とメディアのパスを変更しています。
 以前は作品ごとのHTMLページがなかったため、今回は `/works/tyoi-server/` など69件の詳細ページを追加しています。
-画像・動画のファイルは移動・変更していません。
+初回移行時は画像・動画のファイルを移動・変更していません。
 
 旧データからの移行は完了しており、現在は `src/content/works/*.md` が作品データの管理元です。
 作品の更新はMarkdownだけに行ってください。年・状態・使用技術・機能は、既存情報で確認できたものだけを設定し、不明な値は省略しています。
@@ -67,16 +73,16 @@ draft: true
 subcategory: [web, program]
 year: 2026
 status: development
-thumbnail: /works/my-project/preview.png
+thumbnail: /works/my-project/image-01.png
 thumbnailAlt: "作品の画面"
 gallery:
     - type: image
-      src: /works/my-project/preview.png
+      src: /works/my-project/image-01.png
       alt: "作品の画面"
     - type: video
-      src: /works/my-project/demo.mp4
+      src: /works/my-project/video-01.mp4
       alt: "操作デモ"
-      # poster: /works/my-project/video-poster.png
+      # poster: /works/my-project/image-02.png
 technologies:
     - TypeScript
 features:
@@ -90,7 +96,8 @@ featuredOrder: 1
 relatedPosts: []
 ```
 
-画像・動画を `public/works/my-project/` に配置した場合、Markdownには `/works/my-project/preview.png` のように公開パスを書きます。
+画像・動画は `public/works/<作品ID>/` に配置し、種類ごとに `image-01.png`・`video-01.mp4` の形式でギャラリー掲載順に採番します。拡張子は元の形式を維持します。同じファイルへの重複参照は同じURLを使い、ギャラリー外のサムネイルは画像の末尾に採番します。
+Markdownには `/works/my-project/image-01.png` のように公開パスを書きます。追加時は既存ファイルの番号を変更せず、次の未使用番号を使ってください。
 `thumbnail` を省略するとギャラリー内の先頭画像を使います。画像がなければサイトに合わせたプレースホルダーを表示します。
 動画だけの作品には「VIDEO」を表示し、プレビューと詳細で動画を再生できます。
 

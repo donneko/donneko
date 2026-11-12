@@ -4,11 +4,11 @@ description: Node.js / TypeScript 向けに作っているロガー。
 category: software
 subcategory: npm
 order: 2
-thumbnail: /works/tyoi-logger/terminal-output.png
+thumbnail: /works/tyoi-logger/image-01.png
 thumbnailAlt: tyoi-logger の起動画面
 gallery:
     - type: image
-      src: /works/tyoi-logger/terminal-output.png
+      src: /works/tyoi-logger/image-01.png
       alt: tyoi-logger の起動画面
 technologies:
     - Node.js

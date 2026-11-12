@@ -131,20 +131,23 @@ subcategory:
 
 ### 画像・動画
 
-`public/works/my-project/preview.png` を配置した場合は、`/works/my-project/preview.png` と指定します。
+作品のメディアは `public/works/<作品ID>/` にまとめます。画像は `image-01.png`、動画は `video-01.mp4` のように、種類ごとにギャラリー掲載順の連番を付けます。拡張子は元の形式を維持します。
+同じファイルをサムネイルとギャラリーで使う場合は同じURLを指定し、ギャラリーにないサムネイルは画像の末尾に採番します。既存ファイルの番号は不要に変更せず、新しく追加するファイルは次の未使用番号を使ってください。
+`public/works/my-project/image-01.png` を配置した場合は、`/works/my-project/image-01.png` と指定します。
 Worksのメタ情報内のURLは、単一の `/` から始まる公開パス、または `http://`・`https://` です。`//` から始まるURL、バックスラッシュ、制御文字は許可しません。
+今回の作品名・メディア整理の対応表と削除一覧は [メディア監査](../../docs/works-media-audit.md) に記録しています。
 
 ```yaml
-thumbnail: /works/my-project/preview.png
+thumbnail: /works/my-project/image-01.png
 thumbnailAlt: "作品のプレビュー画面"
 gallery:
     - type: image
-      src: /works/my-project/preview.png
+      src: /works/my-project/image-01.png
       alt: "作品の画面"
     - type: video
-      src: /works/my-project/demo.mp4
+      src: /works/my-project/video-01.mp4
       alt: "操作デモ"
-      poster: /works/my-project/poster.png
+      poster: /works/my-project/image-02.png
 ```
 
 | galleryの項目 | 型                     | 必須 | 省略時                                     |
@@ -209,7 +212,7 @@ const message = "表示例";
 
 > 引用の例です。
 
-![画像の説明](/works/my-project/preview.png)
+![画像の説明](/works/my-project/image-01.png)
 ````
 
 ## 確認コマンド
