@@ -1,13 +1,15 @@
 ---
-title: Blender アニメーション 08
-description: Blender アニメーションの作品。
-category: visual
-subcategory: 3d
+title: Blender バックルームズもどき
+description: Blender バックルームズをマテリアルで作ってみたやつ
+category: design
+subcategory:
+    - 3d
+    - video
 order: 19
 gallery:
     - type: video
       src: /works/blender-animation-08/animation.mp4
-      alt: Blender アニメーション 08
+      alt: Blender バックルームズ アニメーション
 technologies:
     - Blender
 features: []

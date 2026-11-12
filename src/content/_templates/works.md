@@ -2,7 +2,9 @@
 title: "作品のタイトル"
 description: "作品の内容が伝わる短い概要に書き換えてください。"
 category: software
-# subcategory: web
+subcategory: []
+# 複数指定できます。上の行を例の配列に置き換えてください。
+# subcategory: [web, program]
 # 分かっている情報だけを設定します。
 # year: 2026
 # status: development

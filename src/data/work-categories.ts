@@ -18,4 +18,6 @@ export const workSubcategories = {
     "3d": "3D",
     game: "ゲーム",
     video: "動画",
+    experimental: "実験的",
+    arduino: "Arduino",
 } as const;

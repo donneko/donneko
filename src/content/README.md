@@ -87,7 +87,7 @@ draft: true
 | `title`         | string                       | 必須 | なし                   | 空でない作品名。                                                    |
 | `description`   | string                       | 必須 | なし                   | 空でない概要。Featured・Preview・詳細・meta descriptionに使用。     |
 | `category`      | string                       | 必須 | なし                   | 下表の4グループから1つ指定。                                        |
-| `subcategory`   | string                       | 任意 | 表示しない             | より細かな分類。元の9分類もこの項目で保持。                         |
+| `subcategory`   | string[]（stringも互換対応） | 任意 | `[]`                   | より細かな分類を複数指定。元の9分類もこの項目で保持。               |
 | `year`          | number                       | 任意 | 表示しない             | 制作年。1000〜9999の整数。分からなければ省略。                      |
 | `status`        | string                       | 任意 | 表示しない             | 空でない状態の表示名。例：`development`。固定の選択肢はありません。 |
 | `thumbnail`     | string                       | 任意 | ギャラリー内の先頭画像 | Index・Featuredの画像。画像がなければプレースホルダーを表示。       |
@@ -104,14 +104,25 @@ draft: true
 
 ### カテゴリ・表示順・関連記事
 
-| `category` | 表示名            | `subcategory` の既存値   |
-| ---------- | ----------------- | ------------------------ |
-| `software` | Software          | `web`、`npm`、`program`  |
-| `hardware` | Hardware          | `hardware`               |
-| `design`   | Design            | `design`、`illustration` |
-| `visual`   | 3D / Game / Video | `3d`、`game`、`video`    |
+| `category` | 表示名       | `subcategory` の既存値                          |
+| ---------- | ------------ | ----------------------------------------------- |
+| `software` | ソフトウェア | `web`、`npm`、`program`                         |
+| `hardware` | ハードウェア | `hardware`、`arduino`                           |
+| `design`   | デザイン     | `design`、`illustration`、`3d`、`game`、`video` |
+| `others`   | その他       | `experimental` など                             |
 
-既存のsubcategoryは対応する日本語表示に変換します。それ以外の空でない文字列も、そのままの表示名として指定できます。
+`subcategory` は配列で複数指定できます。カテゴリにかかわらず指定でき、上表の組み合わせに制限はありません。
+
+```yaml
+subcategory:
+    - arduino
+    - experimental
+# 1行でも指定できます：subcategory: [arduino, experimental]
+```
+
+既存のsubcategoryは対応する表示名に変換し、記述順に「 / 」で区切って一覧・プレビュー・詳細へ表示します。それ以外の空でない文字列も、そのままの表示名として指定できます。
+前後の空白を除去し、同じ値の重複はまとめます。省略・空配列（`[]`）・値なし（`subcategory:` または `null`）は分類なしです。空文字列や文字列以外の配列要素は使えません。
+従来の単一値（`subcategory: web`）も引き続き利用でき、内部では1要素の配列として扱います。Explorerのカテゴリフィルタは引き続き `category` で絞り込みます。
 
 - Featuredは公開作品のうち `featured: true` の作品を最大3件表示し、先頭を大きくします。`featuredOrder` → `order` → IDの順で並べます。
 - Indexは `order` → IDの順です。公開作品には本文の有無にかかわらず詳細ページを生成します。

@@ -1,15 +1,15 @@
 ---
-title: 学習・実験 05
-description: 学習や試作の記録。
+title: 初めてのサイト
+description: 初めて作ったサイトです。HTMLとCSSを使って作りました。
 category: software
 subcategory: program
 order: 69
 thumbnail: /works/study-experiment-05/photo.jpg
-thumbnailAlt: 学習・実験 05
+thumbnailAlt: 初めてのサイト
 gallery:
     - type: image
       src: /works/study-experiment-05/photo.jpg
-      alt: 学習・実験 05
+      alt: 初めてのサイト
 technologies: []
 features: []
 links: []

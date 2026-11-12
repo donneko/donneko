@@ -10,6 +10,9 @@ gallery:
     - type: image
       src: /works/tyoi-server/terminal-output.png
       alt: tyoi-server の起動画面
+    - type: image
+      src: /works/node-server/terminal-output.jpg
+      alt: 自作Webサーバーの実行画面
 technologies:
     - Node.js
     - TypeScript

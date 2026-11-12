@@ -64,7 +64,7 @@ draft: true
 
 ```yaml
 # 任意項目の記述例。実際に確認できる情報だけを設定してください。
-subcategory: web
+subcategory: [web, program]
 year: 2026
 status: development
 thumbnail: /works/my-project/preview.png
@@ -106,7 +106,9 @@ links:
       external: true
 ```
 
-`gallery`、`technologies`、`features`、`links`、`relatedPosts` の初期値は空配列です。
+`subcategory` は複数指定できます（例：`subcategory: [web, program]`）。従来の `subcategory: web` も引き続き使えます。省略・空配列・値なし（null）は分類なしとして扱い、同じ値の重複はまとめます。
+
+`subcategory`、`gallery`、`technologies`、`features`、`links`、`relatedPosts` の初期値は空配列です。
 `featured`・`draft` は省略時 `false`、`featuredOrder`・`order` は省略時 `999` です。
 年・状態・画像は省略できます。情報がない見出しや空の本文欄は表示しません。
 

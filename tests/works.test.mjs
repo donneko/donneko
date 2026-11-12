@@ -116,6 +116,48 @@ test("全作品のメタ情報・メディア・リンクを静的ページに�
     }
 });
 
+test("サブカテゴリーは複数指定・旧単一値・未指定に対応し、全表示箇所に反映する", async (t) => {
+    const root = await fixture(t);
+    await rm(join(root, "src/content/works"), { recursive: true });
+    await mkdir(join(root, "src/content/works"));
+    await addWork(root, "multi", {
+        subcategory: [" arduino ", "experimental", "arduino", "独自<分類>"],
+    });
+    await addWork(root, "legacy", { subcategory: " web " });
+    await addWork(root, "omitted");
+    await addWork(root, "empty", { subcategory: [] });
+    await addWork(root, "null-value", { subcategory: null });
+    build(root);
+
+    const works = JSON.parse(await readFile(join(root, "dist/verify-works.json"), "utf8"));
+    assert.deepEqual(works.find(({ id }) => id === "multi").data.subcategory, [
+        "arduino",
+        "experimental",
+        "独自<分類>",
+    ]);
+    assert.deepEqual(works.find(({ id }) => id === "legacy").data.subcategory, ["web"]);
+    const index = await html(root);
+    for (const [id, label] of [
+        ["multi", "Arduino / 実験的 / 独自&lt;分類&gt;"],
+        ["legacy", "Webサイト"],
+    ]) {
+        const row = index.match(
+            new RegExp(`<li\\b[^>]*data-work-id="${id}"[^>]*>[\\s\\S]*?</li>`)
+        )?.[0];
+        const preview = index.match(
+            new RegExp(`<template\\b[^>]*data-work-template="${id}"[^>]*>[\\s\\S]*?</template>`)
+        )?.[0];
+        assert.ok(row?.includes(label), `Indexの分類欠落: ${id}`);
+        assert.ok(preview?.includes(label), `Previewの分類欠落: ${id}`);
+        assert.ok((await html(root, id)).includes(`<p class="work-subcategory">${label}</p>`));
+    }
+    assert.doesNotMatch(index, /独自<分類>|Arduino \/ 実験的 \/ Arduino/);
+    for (const id of ["omitted", "empty", "null-value"]) {
+        assert.deepEqual(works.find((work) => work.id === id).data.subcategory, []);
+        assert.doesNotMatch(await html(root, id), /class="work-subcategory"/);
+    }
+});
+
 test("Featured順序と上限・下書き除外・省略値・Markdown・公開Blogとの関連・baseパス", async (t) => {
     const root = await fixture(t);
     await rm(join(root, "src/content/works"), { recursive: true });

@@ -1,16 +1,19 @@
 ---
-title: Stormworks ビルド 02
-description: Stormworks ビルドの作品。
-category: visual
-subcategory: game
+title: Stormworks で使う通信機用のRAM
+description: Stormworksで通信機のデータを一時的に保存したりするためのRAM
+category: software
+subcategory:
+    - game
+    - program
 order: 62
 thumbnail: /works/stormworks-build-02/preview.jpg
-thumbnailAlt: Stormworks ビルド 02
+thumbnailAlt: RAMの制作中のスクリーンショット
 gallery:
     - type: image
       src: /works/stormworks-build-02/preview.jpg
-      alt: Stormworks ビルド 02
-technologies: []
+      alt: RAMの制作中のスクリーンショット
+technologies:
+    - Lua
 features: []
 links: []
 featured: false

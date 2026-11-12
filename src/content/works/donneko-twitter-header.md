@@ -1,15 +1,18 @@
 ---
-title: Xヘッダー画像
+title: ヘッダー用の画像
 description: ペットボトルのラベル風に作ったヘッダー画像。
 category: design
 subcategory: design
 order: 33
 thumbnail: /works/donneko-twitter-header/header.png
-thumbnailAlt: DONNEKO のXヘッダー画像
+thumbnailAlt: Twitterのヘッダー画像
 gallery:
     - type: image
       src: /works/donneko-twitter-header/header.png
-      alt: DONNEKO のXヘッダー画像
+      alt: Twitterのヘッダー画像
+    - type: image
+      src: /works/donneko-youtube-header/header.png
+      alt: YouTubeのヘッダー画像
 technologies: []
 features: []
 links: []

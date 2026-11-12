@@ -1,6 +1,6 @@
 ---
 title: 配信用フレーム
-description: ワイド配信向けに作ったフレーム素材。
+description: 21:9のフレームはなかなか見つからないので、自作してみた
 category: design
 subcategory: design
 order: 46

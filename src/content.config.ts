@@ -92,7 +92,12 @@ const works = defineCollection({
         title: z.string().trim().min(1),
         description: z.string().trim().min(1),
         category: z.enum(workCategoryIds),
-        subcategory: z.string().trim().min(1).optional(),
+        subcategory: z
+            .union([z.array(z.string().trim().min(1)), z.string().trim().min(1)])
+            .nullish()
+            .transform((value) => [
+                ...new Set(value == null ? [] : Array.isArray(value) ? value : [value]),
+            ]),
         year: z.number().int().min(1000).max(9999).optional(),
         status: z.string().trim().min(1).optional(),
         thumbnail: workUrl.optional(),

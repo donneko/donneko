@@ -1,7 +1,7 @@
 ---
-title: Blender レンダー 04
-description: Blender で制作した3D作品。
-category: visual
+title: Blender チュートリアル 瓶
+description: Blender チュートリアルを参考に制作した瓶の作品。
+category: design
 subcategory: 3d
 order: 23
 thumbnail: /works/blender-render-04/render.png
@@ -10,6 +10,9 @@ gallery:
     - type: image
       src: /works/blender-render-04/render.png
       alt: Blender レンダー 04
+    - type: image
+      src: /works/blender-render-02/render.png
+      alt: Blender レンダー 02
 technologies:
     - Blender
 features: []

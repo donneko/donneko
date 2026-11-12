@@ -29,8 +29,11 @@ export function localUrl(path: string): string {
 export const worksUrl = (slug = "") => localUrl(`/works/${slug ? `${slug}/` : ""}`);
 export const workCategoryLabel = (work: Work) => workCategories[work.data.category];
 export function workSubcategoryLabel(work: Work): string | undefined {
-    const id = work.data.subcategory;
-    return id ? (workSubcategories[id as keyof typeof workSubcategories] ?? id) : undefined;
+    return (
+        work.data.subcategory
+            .map((id) => workSubcategories[id as keyof typeof workSubcategories] ?? id)
+            .join(" / ") || undefined
+    );
 }
 
 export function workThumbnail(work: Work): WorkMedia | undefined {

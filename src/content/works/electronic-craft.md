@@ -1,8 +1,10 @@
 ---
-title: 電子工作
+title: Arduinoで信号機を作ってみた
 description: 部品を触りながら、電子工作でできることを試していた記録。
 category: hardware
-subcategory: hardware
+subcategory:
+    - arduino
+    - experimental
 order: 30
 thumbnail: /works/electronic-craft/prototype.jpg
 thumbnailAlt: 電子工作の試作品
@@ -16,7 +18,9 @@ gallery:
     - type: image
       src: /works/electronic-craft/prototype.jpg
       alt: 電子工作の試作品
-technologies: []
+technologies:
+    - Arduino
+    - C++
 features: []
 links: []
 featured: false
