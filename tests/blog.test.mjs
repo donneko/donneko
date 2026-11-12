@@ -23,6 +23,7 @@ async function createFixture(t) {
     const root = await realpath(await mkdtemp(join(tmpdir(), "donneko-blog-test-")));
     t.after(() => rm(root, { recursive: true, force: true }));
     await cp(join(project, "src"), join(root, "src"), { recursive: true });
+    await cp(join(project, "public"), join(root, "public"), { recursive: true });
     for (const name of ["astro.config.mjs", "tsconfig.json", "package.json"]) {
         await cp(join(project, name), join(root, name));
     }
@@ -33,7 +34,7 @@ async function createFixture(t) {
         config.replace("defineConfig({", 'defineConfig({ cacheDir: "./.astro-cache",')
     );
     await symlink(join(project, "node_modules"), join(root, "node_modules"), "dir");
-    await rm(join(root, "src/content/blog"), { recursive: true });
+    await rm(join(root, "src/content/blog"), { recursive: true, force: true });
     await mkdir(join(root, "src/content/blog"));
     return root;
 }
@@ -202,7 +203,7 @@ const message: string = "sample";
         const source = await readFile(file, "utf8");
         assert.doesNotMatch(source, /DRAFT_SECRET_/);
         for (const [, href] of source.matchAll(/(?:href|src)="([^"#]+)"/g)) {
-            if (!href.startsWith("/") || ["/favicon.svg", "/favicon.ico"].includes(href)) continue;
+            if (!href.startsWith("/")) continue;
             const pathname = decodeURIComponent(new URL(href, "https://example.com").pathname);
             const target = join(root, "dist", pathname, pathname.endsWith("/") ? "index.html" : "");
             await assert.doesNotReject(readFile(target), `リンク切れ: ${file} → ${href}`);

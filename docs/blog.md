@@ -3,7 +3,7 @@
 メタ情報の一覧・初期値・書き方は [ContentのREADME](../src/content/README.md) にまとめています。
 記事の追加には [Blogテンプレート](../src/content/_templates/blog.md) をコピーして使ってください。README・テンプレートは公開対象外です。
 
-既存のAstro 7.2.2 / SSG構成にContent Layer API（`glob`、`getCollection`、`render`）を追加しています。
+Astro 7.4.1 / SSG構成でContent Layer API（`glob`、`getCollection`、`render`）を使用しています。
 記事は `src/content/blog/` 直下の `.md` のみです。CMS・DB・認証・投稿APIはありません。
 追加のnpmパッケージは使用していません。Markdownの安全設定には、既存のAstro依存に含まれる `@astrojs/markdown-satteri` を使用します。
 

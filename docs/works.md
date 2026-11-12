@@ -3,7 +3,7 @@
 メタ情報の一覧・初期値・書き方は [ContentのREADME](../src/content/README.md) にまとめています。
 記事の追加には [Worksテンプレート](../src/content/_templates/works.md) をコピーして使ってください。README・テンプレートは公開対象外です。
 
-Astro 7.2.2のContent Layer APIを使い、作品を `src/content/works/*.md` で管理します。
+Astro 7.4.1のContent Layer APIを使い、作品を `src/content/works/*.md` で管理します。
 静的HTMLを生成する構成です。依存パッケージ、GitHub Actions、公開先設定は変更していません。
 
 ## 現在のファイル構成

@@ -23,6 +23,7 @@ async function fixture(t) {
     const root = await realpath(await mkdtemp(join(tmpdir(), "donneko-works-test-")));
     t.after(() => rm(root, { recursive: true, force: true }));
     await cp(join(project, "src"), join(root, "src"), { recursive: true });
+    await mkdir(join(root, "src/content/blog"), { recursive: true });
     await cp(join(project, "tsconfig.json"), join(root, "tsconfig.json"));
     await cp(join(project, "package.json"), join(root, "package.json"));
     const config = await readFile(join(project, "astro.config.mjs"), "utf8");
