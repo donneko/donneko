@@ -1,0 +1,29 @@
+---
+import type { GetStaticPaths } from "astro";
+import BlogLayout from "../../../layouts/BlogLayout.astro";
+import PostList from "../../../components/blog/PostList.astro";
+import { blogCategories, blogCategoryIds, type BlogCategory } from "../../../data/blog";
+import { getPublishedPosts, type BlogPost } from "../../../lib/blog";
+
+export const getStaticPaths = (async () => {
+    const posts = await getPublishedPosts();
+    return blogCategoryIds.map((category) => ({
+        params: { category },
+        props: { category, posts: posts.filter((post) => post.data.category === category) },
+    }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+    category: BlogCategory;
+    posts: BlogPost[];
+}
+
+const { category, posts } = Astro.props;
+const { label, description } = blogCategories[category];
+---
+
+<BlogLayout title={`${label}の記事`} description={`${description}に関するブログの記事一覧。`}>
+    <h1 class="page-title">{label}</h1>
+    <p>{description}の記事一覧（{posts.length}件）</p>
+    <PostList posts={posts} />
+</BlogLayout>

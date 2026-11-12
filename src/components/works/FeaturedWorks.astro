@@ -1,0 +1,37 @@
+---
+import WorkThumbnail from "./WorkThumbnail.astro";
+import { getFeaturedWorks, workCategoryLabel, worksUrl, type Work } from "../../lib/works";
+
+interface Props {
+    works: Work[];
+}
+
+const featured = getFeaturedWorks(Astro.props.works);
+---
+
+{
+    featured.length > 0 && (
+        <section class="featured-section" aria-labelledby="featured-heading">
+            <div class="works-section-heading">
+                <h2 id="featured-heading">注目の作品</h2>
+            </div>
+            <div class:list={["featured-grid", { "featured-single": featured.length === 1 }]}>
+                {featured.map((work, index) => (
+                    <a class="featured-card" href={worksUrl(work.id)}>
+                        <span class="featured-visual">
+                            <WorkThumbnail work={work} eager={index === 0} />
+                        </span>
+                        <div class="featured-description">
+                            <p class="work-eyebrow">
+                                {String(index + 1).padStart(2, "0")} / {workCategoryLabel(work)}
+                            </p>
+                            <h3>{work.data.title}</h3>
+                            <p>{work.data.description}</p>
+                            <span class="featured-link">作品を詳しく見る →</span>
+                        </div>
+                    </a>
+                ))}
+            </div>
+        </section>
+    )
+}

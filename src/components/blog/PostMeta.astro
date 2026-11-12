@@ -1,0 +1,38 @@
+---
+import { blogCategories } from "../../data/blog";
+import { categoryUrl, tagUrl, formatBlogDate, type BlogPost } from "../../lib/blog";
+
+interface Props {
+    post: BlogPost;
+    showUpdated?: boolean;
+}
+
+const { post, showUpdated = false } = Astro.props;
+const { pubDate, updatedDate, category, tags } = post.data;
+---
+
+<div class="post-meta">
+    <p>
+        投稿日：<time datetime={pubDate.toISOString()}>{formatBlogDate(pubDate)}</time>
+        {
+            showUpdated && updatedDate && (
+                <span>
+                    更新日：
+                    <time datetime={updatedDate.toISOString()}>{formatBlogDate(updatedDate)}</time>
+                </span>
+            )
+        }
+    </p>
+    <p>カテゴリ：<a href={categoryUrl(category)}>{blogCategories[category].label}</a></p>
+    {
+        tags.length > 0 && (
+            <ul class="post-tags" aria-label="タグ">
+                {tags.map((tag) => (
+                    <li>
+                        <a href={tagUrl(tag)}>#{tag}</a>
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+</div>

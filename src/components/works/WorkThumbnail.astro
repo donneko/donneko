@@ -1,0 +1,42 @@
+---
+import { localUrl, workThumbnail, type Work } from "../../lib/works";
+
+interface Props {
+    work: Work;
+    decorative?: boolean;
+    eager?: boolean;
+}
+
+const { work, decorative = false, eager = false } = Astro.props;
+const thumbnail = workThumbnail(work);
+const isVideo = work.data.gallery.some(({ type }) => type === "video");
+---
+
+<span class="work-thumbnail">
+    {
+        thumbnail ? (
+            <img
+                src={localUrl(thumbnail.src)}
+                alt={decorative ? "" : thumbnail.alt || `${work.data.title}のプレビュー`}
+                width="800"
+                height="500"
+                loading={eager ? "eager" : "lazy"}
+                decoding="async"
+            />
+        ) : (
+            <span
+                class="work-placeholder"
+                role={decorative ? undefined : "img"}
+                aria-hidden={decorative ? "true" : undefined}
+                aria-label={
+                    decorative
+                        ? undefined
+                        : `${work.data.title}：${isVideo ? "動画作品" : "画像なし"}`
+                }
+            >
+                <span aria-hidden="true">{isVideo ? "▶" : "◇"}</span>
+                <small>{isVideo ? "VIDEO" : "NO IMAGE"}</small>
+            </span>
+        )
+    }
+</span>

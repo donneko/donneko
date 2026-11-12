@@ -9,20 +9,22 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "test:blog": "node --test tests/blog.test.mjs",
+    "test:works": "node --test tests/works.test.mjs",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.2.2"
+    "astro": "^7.4.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/node": "^25.9.3",
-    "eslint": "^10.7.0",
+    "@types/node": "^25.9.9",
+    "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
-    "globals": "^17.7.0",
-    "prettier": "^3.9.5",
+    "globals": "^17.14.0",
+    "prettier": "^3.10.0",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.64.0"
+    "typescript-eslint": "^8.72.2"
   }
 }

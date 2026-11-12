@@ -1,0 +1,249 @@
+---
+import WorkThumbnail from "./WorkThumbnail.astro";
+import ProjectPreview from "./ProjectPreview.astro";
+import { workCategories } from "../../data/work-categories";
+import { workCategoryLabel, workSubcategoryLabel, worksUrl, type Work } from "../../lib/works";
+
+interface Props {
+    works: Work[];
+}
+
+const { works } = Astro.props;
+---
+
+<section class="project-explorer" data-project-explorer aria-labelledby="explorer-heading">
+    <div class="works-section-heading">
+        <h2 id="explorer-heading">すべての作品</h2>
+    </div>
+    <p class="explorer-instructions" data-explorer-instructions>作品名から詳細ページを開けます。</p>
+    <div class="work-filters" aria-label="作品のカテゴリで絞り込み" hidden>
+        <button type="button" data-work-filter="all" aria-pressed="true"
+            >すべて <span>{works.length}</span></button
+        >
+        {
+            Object.entries(workCategories).map(([id, label]) => (
+                <button type="button" data-work-filter={id} aria-pressed="false">
+                    {label} <span>{works.filter((work) => work.data.category === id).length}</span>
+                </button>
+            ))
+        }
+    </div>
+    <p class="explorer-count" data-work-count>{works.length} / {works.length}作品</p>
+    <div class="explorer-shell">
+        <section class="project-index" aria-labelledby="project-index-heading">
+            <h3 id="project-index-heading" class="explorer-pane-heading">Project Index</h3>
+            <div class="project-index-scroll">
+                <ol class="project-index-list">
+                    {
+                        works.map((work, index) => (
+                            <li
+                                class="work-index-row"
+                                data-work-row
+                                data-work-id={work.id}
+                                data-work-category={work.data.category}
+                            >
+                                <a
+                                    class="work-index-link"
+                                    href={worksUrl(work.id)}
+                                    data-work-select={work.id}
+                                >
+                                    <WorkThumbnail work={work} decorative />
+                                    <span class="work-index-description">
+                                        <span class="work-index-number" aria-hidden="true">
+                                            {String(index + 1).padStart(2, "0")}
+                                        </span>
+                                        <strong>{work.data.title}</strong>
+                                        <span class="work-index-category">
+                                            {workCategoryLabel(work)}
+                                            {work.data.year ? ` / ${work.data.year}年` : ""}
+                                        </span>
+                                        <span class="work-index-subcategory">
+                                            {workSubcategoryLabel(work)}
+                                        </span>
+                                    </span>
+                                    <span class="work-index-arrow" aria-hidden="true">
+                                        →
+                                    </span>
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ol>
+                <p class="works-empty" data-index-empty hidden={works.length > 0}>
+                    該当する作品はありません。
+                </p>
+            </div>
+        </section>
+        <section
+            class="project-preview"
+            id="work-preview"
+            aria-labelledby="project-preview-heading"
+            tabindex="0"
+        >
+            <h3 id="project-preview-heading" class="explorer-pane-heading">Project Preview</h3>
+            <div data-preview-content>
+                {
+                    works[0] ? (
+                        <ProjectPreview work={works[0]} />
+                    ) : (
+                        <p class="works-empty">表示する作品はありません。</p>
+                    )
+                }
+            </div>
+        </section>
+    </div>
+    <p
+        class="works-sr-only"
+        data-work-announcement
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+    >
+    </p>
+    {
+        works.map((work) => (
+            <template data-work-template={work.id}>
+                <ProjectPreview work={work} />
+            </template>
+        ))
+    }
+</section>
+
+<script>
+    const explorer = document.querySelector<HTMLElement>("[data-project-explorer]");
+    if (explorer) {
+        const desktop = window.matchMedia("(min-width: 1000px)");
+        const rows = [...explorer.querySelectorAll<HTMLLIElement>("[data-work-row]")];
+        const links = [...explorer.querySelectorAll<HTMLAnchorElement>("[data-work-select]")];
+        const filters = [...explorer.querySelectorAll<HTMLButtonElement>("[data-work-filter]")];
+        const templates = new Map(
+            [...explorer.querySelectorAll<HTMLTemplateElement>("[data-work-template]")].map(
+                (template) => [template.dataset.workTemplate!, template]
+            )
+        );
+        const preview = explorer.querySelector<HTMLElement>("[data-preview-content]")!;
+        const previewPane = explorer.querySelector<HTMLElement>(".project-preview")!;
+        const announcement = explorer.querySelector<HTMLElement>("[data-work-announcement]")!;
+        const instructions = explorer.querySelector<HTMLElement>("[data-explorer-instructions]")!;
+        let selectedId = rows[0]?.dataset.workId;
+
+        const pauseVideos = () =>
+            preview.querySelectorAll("video").forEach((video) => video.pause());
+        const updateControls = () => {
+            links.forEach((link) => {
+                const selected = link.dataset.workSelect === selectedId;
+                link.dataset.selected = String(selected);
+                if (desktop.matches) {
+                    link.setAttribute("role", "button");
+                    link.setAttribute("aria-pressed", String(selected));
+                    link.setAttribute("aria-controls", "work-preview");
+                } else {
+                    link.removeAttribute("role");
+                    link.removeAttribute("aria-pressed");
+                    link.removeAttribute("aria-controls");
+                }
+            });
+            instructions.textContent = desktop.matches
+                ? "左の作品を選ぶと右側にプレビューを表示します。矢印キーでも選べます。"
+                : "作品をタップすると詳細ページを開きます。";
+        };
+
+        const select = (id: string | undefined, announce = true) => {
+            selectedId = id;
+            pauseVideos();
+            const template = id ? templates.get(id) : undefined;
+            if (template) {
+                preview.replaceChildren(template.content.cloneNode(true));
+            } else {
+                const empty = document.createElement("p");
+                empty.className = "works-empty";
+                empty.textContent = "該当する作品はありません。";
+                preview.replaceChildren(empty);
+            }
+            previewPane.scrollTop = 0;
+            updateControls();
+            if (announce) {
+                const title = links
+                    .find((link) => link.dataset.workSelect === id)
+                    ?.querySelector("strong")?.textContent;
+                announcement.textContent = title
+                    ? `${title}をプレビューに表示しました。`
+                    : "該当する作品はありません。";
+            }
+        };
+
+        links.forEach((link) => {
+            link.addEventListener("click", (event) => {
+                if (
+                    !desktop.matches ||
+                    event.metaKey ||
+                    event.ctrlKey ||
+                    event.shiftKey ||
+                    event.altKey
+                )
+                    return;
+                event.preventDefault();
+                select(link.dataset.workSelect);
+            });
+            link.addEventListener("keydown", (event) => {
+                if (!desktop.matches) return;
+                if (event.key === " ") {
+                    event.preventDefault();
+                    select(link.dataset.workSelect);
+                    return;
+                }
+                if (!["ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+                event.preventDefault();
+                const visible = links.filter(
+                    (item) => !item.closest<HTMLLIElement>("[data-work-row]")!.hidden
+                );
+                const current = visible.indexOf(link);
+                const targetIndex =
+                    event.key === "Home"
+                        ? 0
+                        : event.key === "End"
+                          ? visible.length - 1
+                          : Math.max(
+                                0,
+                                Math.min(
+                                    visible.length - 1,
+                                    current + (event.key === "ArrowDown" ? 1 : -1)
+                                )
+                            );
+                const target = visible[targetIndex];
+                target?.focus();
+                if (target) select(target.dataset.workSelect);
+            });
+        });
+
+        filters.forEach((button) =>
+            button.addEventListener("click", () => {
+                const category = button.dataset.workFilter;
+                filters.forEach((filter) =>
+                    filter.setAttribute("aria-pressed", String(filter === button))
+                );
+                rows.forEach((row) => {
+                    row.hidden = category !== "all" && row.dataset.workCategory !== category;
+                });
+                const visible = rows.filter((row) => !row.hidden);
+                explorer.querySelector<HTMLElement>("[data-index-empty]")!.hidden =
+                    visible.length > 0;
+                explorer.querySelector<HTMLElement>("[data-work-count]")!.textContent =
+                    `${visible.length} / ${rows.length}作品`;
+                if (!visible.some((row) => row.dataset.workId === selectedId)) {
+                    select(visible[0]?.dataset.workId);
+                    explorer.querySelector<HTMLElement>(".project-index-scroll")!.scrollTop = 0;
+                }
+                announcement.textContent = `${button.textContent?.trim()}：${visible.length}作品を表示しています。`;
+            })
+        );
+
+        desktop.addEventListener("change", () => {
+            pauseVideos();
+            updateControls();
+        });
+        updateControls();
+        explorer.dataset.enhanced = "true";
+        explorer.querySelector<HTMLElement>(".work-filters")!.hidden = false;
+    }
+</script>

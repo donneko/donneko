@@ -14,16 +14,10 @@ export const links: LinkTable[] = [
         description: "作った作品について書かれてるよ！！",
     },
     {
-        href: "/diary/",
-        label: "日記だよ",
+        href: "/blog/",
+        label: "ブログとか",
         external: false,
         description: "思ったことについて適当に書くよ！！",
-    },
-    {
-        href: "/links/",
-        label: "リンク",
-        external: false,
-        description: "リンクのことについていっぱい書かれてるよ！！",
     },
     {
         href: "https://github.com/donneko",

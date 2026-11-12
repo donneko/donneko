@@ -1,0 +1,24 @@
+---
+import WorkMedia from "./WorkMedia.astro";
+import type { WorkMedia as Media } from "../../lib/works";
+
+interface Props {
+    items: Media[];
+    title: string;
+}
+
+const { items, title } = Astro.props;
+---
+
+{
+    items.length > 0 && (
+        <section class="work-gallery-section" aria-labelledby="work-gallery-heading">
+            <h2 id="work-gallery-heading">ギャラリー</h2>
+            <div class="work-gallery">
+                {items.map((media) => (
+                    <WorkMedia media={media} title={title} />
+                ))}
+            </div>
+        </section>
+    )
+}

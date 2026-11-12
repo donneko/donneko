@@ -1,0 +1,145 @@
+.blog-page {
+    max-width: 800px;
+    overflow-wrap: anywhere;
+    line-height: 1.8;
+}
+
+.blog-navigation,
+.blog-pagination,
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 20px;
+}
+.blog-page .page-title {
+    margin: 0 0 12px;
+}
+
+.blog-navigation {
+    margin-bottom: 24px;
+}
+
+.blog-intro {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.blog-total {
+    margin: 60px 0 5px 0;
+}
+
+.post-list {
+    margin: 0;
+    padding: 0 clamp(16px, 3vw, 28px);
+    border: 1px solid #111;
+    background: #fff;
+    box-shadow: 3px 3px 0 rgb(0 0 0 / 20%);
+    list-style: none;
+}
+
+.post-list > li + li {
+    border-top: 1px solid #777;
+}
+
+.post-list article {
+    padding: 24px 0;
+}
+
+.post-list h2 {
+    margin: 0 0 12px;
+    font-size: 1.25rem;
+    line-height: 1.6;
+}
+
+.post-meta {
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.post-meta p {
+    margin: 4px 0;
+}
+
+.post-meta time {
+    display: inline-block;
+}
+
+.post-meta span {
+    display: inline-block;
+    margin-left: 16px;
+}
+
+.post-tags {
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.post-description {
+    margin: 16px 0 12px;
+}
+
+.blog-pagination {
+    justify-content: center;
+    margin-top: 28px;
+}
+
+.blog-pagination [aria-current="page"] {
+    font-weight: bold;
+}
+
+.blog-categories {
+    margin-top: 60px;
+    border: 1px solid #111;
+    padding: 1px;
+    background: #fff;
+    box-shadow: 3px 3px 0 rgb(0 0 0 / 20%);
+}
+
+.blog-categories h2 {
+    margin: 0;
+    padding: 5px 10px;
+    background: linear-gradient(#141e6b, #2233bb 10%, #141e6b 90%);
+    color: #fff;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.blog-categories ul {
+    margin: 12px 0;
+    padding: 0 16px 0 36px;
+}
+
+.blog-empty {
+    padding: 20px;
+    border: 1px solid #111;
+    box-shadow: 3px 3px 0 rgb(0 0 0 / 20%);
+    background: #fff;
+}
+
+.blog-article {
+    padding: clamp(16px, 3vw, 28px);
+    border: 1px solid #111;
+    background: #fff;
+    box-shadow: 3px 3px 0 rgb(0 0 0 / 20%);
+}
+
+.post-header {
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #141e6b;
+}
+
+.post-header h1 {
+    margin: 0 0 20px;
+    color: #10113f;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.6;
+}
+
+.post-footer {
+    margin-top: 40px;
+    border-top: 1px solid #777;
+    padding-top: 20px;
+}
