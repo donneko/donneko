@@ -5,9 +5,14 @@ import "../styles/global.css";
 interface Props {
     title: string;
     description?: string;
+    noindex?: boolean;
 }
 
-const { title, description = "丼猫の作品や日記をまとめた個人サイトです。" } = Astro.props;
+const {
+    title,
+    description = "丼猫の作品や日記をまとめた個人サイトです。",
+    noindex = false,
+} = Astro.props;
 const pageTitle = title ? `${title} | 丼猫のウェブサイト` : "丼猫のウェブサイト";
 const canonicalURL = new URL(`${Astro.url.pathname.replace(/\/+$/, "")}/`, Astro.site);
 ---
@@ -18,7 +23,13 @@ const canonicalURL = new URL(`${Astro.url.pathname.replace(/\/+$/, "")}/`, Astro
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={description} />
-        <link rel="canonical" href={canonicalURL.href} />
+        {
+            noindex ? (
+                <meta name="robots" content="noindex, follow" />
+            ) : (
+                <link rel="canonical" href={canonicalURL.href} />
+            )
+        }
         <link rel="icon" href="/favicon.png" type="image/png" sizes="16x16" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <title>{pageTitle}</title>
