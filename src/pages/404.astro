@@ -1,20 +1,22 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import TextBox from "../components/TextBox.astro";
+import Panel from "../components/Panel.astro";
 ---
 
 <Layout
-    title="404 ページが見つかりません"
-    description="お探しのページは見つかりませんでした。トップページからお探しください。"
+    title="404 - ページが見つかりません"
+    description="お探しのページは見つかりませんでした。"
     noindex
 >
     <div class="page">
-        <h1 class="page-title">404 ページが見つかりません</h1>
-        <TextBox>
-            <p>
-                お探しのページは見つかりませんでした。URLが間違っているか、ページが移動・削除された可能性があります。
-            </p>
-            <p><a href="/">トップページへ戻る</a></p>
-        </TextBox>
+        <Panel title="404 ページが見つかりません" tag="div" heading="h1">
+            <TextBox>
+                <p>
+                    お探しのページは見つかりませんでした。URLが間違っているか、ページが移動・削除された可能性があります。
+                </p>
+                <p><a href="/">トップページへ戻る</a></p>
+            </TextBox>
+        </Panel>
     </div>
 </Layout>
