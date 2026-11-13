@@ -2,7 +2,7 @@
 interface Props {
     title: string;
     tag?: "div" | "section" | "article" | "aside";
-    heading?: "h1" | "h2" | "h3" | "h4";
+    heading?: "h1" | "h2" | "h3" | "h4" | "p";
     "data-category"?: string;
 }
 const { title, tag, heading, "data-category": category } = Astro.props;

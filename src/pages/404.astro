@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import TextBox from "../components/TextBox.astro";
 import Panel from "../components/Panel.astro";
 ---
 
@@ -10,13 +9,81 @@ import Panel from "../components/Panel.astro";
     noindex
 >
     <div class="page">
-        <Panel title="404 ページが見つかりません" tag="div" heading="h1">
-            <TextBox>
-                <p>
-                    お探しのページは見つかりませんでした。URLが間違っているか、ページが移動・削除された可能性があります。
-                </p>
-                <p><a href="/">トップページへ戻る</a></p>
-            </TextBox>
+        <Panel title="エラー" tag="div" heading="p">
+            <div class="info-body">
+                <div class="info-box">
+                    <div class="info-icon-box">
+                        <img class="info-icon" src="/warning-icon.png" />
+                    </div>
+
+                    <div class="info-text-box">
+                        <h1>404 - File Not Found</h1>
+                        <p>お探しのページは見つかりませんでした。</p>
+                        <p class="info-description">
+                            URLが間違っているか、ページが移動・削除された可能性があります。
+                        </p>
+                    </div>
+                </div>
+                <div class="link-box">
+                    <a class="link-text" href="/">トップページへ戻る</a>
+                </div>
+            </div>
         </Panel>
     </div>
 </Layout>
+
+<style>
+    .info-body {
+        padding: 1em;
+    }
+    .info-box {
+        display: flex;
+        gap: 1.5em;
+        justify-content: center;
+    }
+    .info-icon-box {
+        width: 5em;
+        display: flex;
+        justify-content: center;
+    }
+    .info-text-box {
+        display: inline-block;
+    }
+    .info-text-box h1 {
+        font-weight: normal;
+        margin: 0;
+        font-size: 1.5em;
+        margin-bottom: 0.5em;
+    }
+    .info-text-box p {
+        margin: 0;
+        margin-bottom: 2px;
+    }
+    .info-description {
+        color: #5a5a5a;
+        font-size: 0.8em;
+    }
+    .info-icon {
+        width: 100%;
+        max-width: 3em;
+        max-height: 5em;
+        height: auto;
+        display: block;
+        image-rendering: pixelated;
+        object-fit: contain;
+    }
+    .link-box {
+        width: 100%;
+        margin: 1.5em 0 0.5em 0;
+        display: block;
+        text-align: center;
+        box-sizing: border-box;
+    }
+    .link-text {
+        display: inline-block;
+        padding: 0.2em 1em;
+        background-color: #e0e0e0;
+
+        border: 3px #717171 outset;
+    }
+</style>
