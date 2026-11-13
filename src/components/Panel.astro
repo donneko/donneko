@@ -1,15 +1,17 @@
 ---
 interface Props {
     title: string;
-    tag?: "section" | "article" | "aside";
+    tag?: "div" | "section" | "article" | "aside";
+    heading?: "h1" | "h2" | "h3" | "h4" | "p";
     "data-category"?: string;
 }
-const { title, tag, "data-category": category } = Astro.props;
+const { title, tag, heading, "data-category": category } = Astro.props;
 const Element = tag ? tag : "section";
+const Heading = heading ? heading : "h2";
 ---
 
 <Element class="panel" data-category={category}>
-    <h2 class="panel-title">{title}</h2>
+    <Heading class="panel-title">{title}</Heading>
     <div class="panel-body"><slot /></div>
 </Element>
 
