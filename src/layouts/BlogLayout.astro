@@ -8,12 +8,21 @@ import "../styles/blog.css";
 interface Props {
     title: string;
     description: string;
+    ogImage?: string;
+    ogImageAlt?: string;
+    ogType?: "website" | "article";
 }
 
-const { title, description } = Astro.props;
+const { title, description, ogImage, ogImageAlt, ogType } = Astro.props;
 ---
 
-<Layout title={title} description={description}>
+<Layout
+    title={title}
+    description={description}
+    ogImage={ogImage}
+    ogImageAlt={ogImageAlt}
+    ogType={ogType}
+>
     <div class="page blog-page">
         <nav class="blog-navigation" aria-label="ブログメニュー">
             <a href={blogUrl()}>記事一覧</a>

@@ -10,6 +10,7 @@ import {
     localUrl,
     workCategoryLabel,
     workMainMedia,
+    workThumbnail,
     workSubcategoryLabel,
     worksUrl,
     type Work,
@@ -33,9 +34,15 @@ const { Content } = await render(work);
 const relatedIds = new Set(relatedPosts.map(({ id }) => id));
 const related = (await getPublishedPosts()).filter((post) => relatedIds.has(post.id));
 const hasBody = Boolean(work.body?.trim());
+const thumbnail = workThumbnail(work);
 ---
 
-<WorkLayout title={title} description={description}>
+<WorkLayout
+    title={title}
+    description={description}
+    ogImage={thumbnail?.src}
+    ogImageAlt={thumbnail?.alt}
+>
     <nav class="work-breadcrumb" aria-label="パンくず">
         <a href={worksUrl()}>Works</a><span aria-hidden="true"> / </span><span aria-current="page"
             >{title}</span

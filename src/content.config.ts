@@ -25,6 +25,12 @@ const blog = defineCollection({
     schema: z.object({
         title: z.string().trim().min(1),
         description: z.string().trim().min(1),
+        ogImage: z
+            .string()
+            .trim()
+            .regex(/^\/(?!\/)[^\\\p{Cc}]+$/u)
+            .optional(),
+        ogImageAlt: z.string().trim().optional(),
         pubDate: z.coerce.date(),
         updatedDate: z.coerce.date().optional(),
         category: z.enum(blogCategoryIds),
