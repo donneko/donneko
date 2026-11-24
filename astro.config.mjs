@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from "astro/config";
+import { defineConfig, sharpImageService } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import { satteri } from "@astrojs/markdown-satteri";
 import { safeMarkdown, accessibleMarkdown } from "./src/lib/safe-markdown.mjs";
@@ -9,6 +9,9 @@ export default defineConfig({
     site: "https://donneko.net",
     trailingSlash: "always",
     integrations: [sitemap()],
+    image: {
+        service: sharpImageService({ webp: { lossless: true } }),
+    },
     markdown: {
         processor: satteri({
             mdastPlugins: [safeMarkdown],
