@@ -1,0 +1,55 @@
+---
+interface Props {
+    href: string;
+    image: string;
+    label: string;
+}
+
+const { href, image, label } = Astro.props;
+---
+
+<a href={href} class="reciprocal-link" target="_blank" rel="noreferrer">
+    <img src={image} class="reciprocal-link-banner" alt={`${label}のバナー`} />
+
+    <span class="reciprocal-link-name">{label}</span>
+    <span class="reciprocal-link-url">{new URL(href).host}</span>
+</a>
+
+<style>
+    .reciprocal-link {
+        box-sizing: border-box;
+        display: grid;
+        width: 100%;
+        height: 3em;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto 1fr;
+        grid-template-areas:
+            "banner name"
+            "banner url";
+        column-gap: 0.5em;
+        border: 2px #1b2894 solid;
+        padding: 2px;
+        text-decoration: none;
+    }
+    .reciprocal-link:hover {
+        background-color: #1b289426;
+        border-style: dashed;
+    }
+    .reciprocal-link-banner {
+        box-sizing: content-box;
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        grid-area: banner;
+        image-rendering: pixelated;
+    }
+    .reciprocal-link-name {
+        grid-area: name;
+        font-size: 1em;
+        text-decoration: underline;
+    }
+    .reciprocal-link-url {
+        grid-area: url;
+        font-size: 0.9em;
+    }
+</style>

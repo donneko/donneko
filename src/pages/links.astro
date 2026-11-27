@@ -2,28 +2,142 @@
 import Layout from "../layouts/Layout.astro";
 import Panel from "../components/Panel.astro";
 import ALink from "../components/link.astro";
+import RLink from "../components/reciprocal-links.astro";
+import Detail from "../components/detail.astro";
+import InfoBox from "../components/info-box.astro";
+
 import { links } from "../data/links.ts";
 ---
 
-<Layout title="リンクたち" description="サイト内ページと外部プロフィールへのリンク集。">
+<Layout title="リンクたち" description="サイト内ページと外部プロフィールへのリンク集・相互リンク。">
     <div class="page">
-        <h1 class="page-title">私のリンク</h1>
-        <Panel title="自分のリンク">
-            <table class="data-table">
-                <thead><tr><th>ページ</th><th>説明</th></tr></thead>
-                <tbody
-                    >{
-                        links.map(({ href, label, description, external }) => (
-                            <tr>
-                                <td>
-                                    <ALink href={href} label={label} external={external} />
-                                </td>
-                                <td>{description}</td>
-                            </tr>
-                        ))
-                    }</tbody
-                >
-            </table>
-        </Panel>
+        <h1 class="page-title">リンクたち</h1>
+        <div class="panels">
+            <Panel title="自分のリンク" heading="h2">
+                <table class="data-table">
+                    <thead><tr><th>ページ</th><th>説明</th></tr></thead>
+                    <tbody
+                        >{
+                            links.map(({ href, label, description, external }) => (
+                                <tr>
+                                    <td>
+                                        <ALink href={href} label={label} external={external} />
+                                    </td>
+                                    <td>{description}</td>
+                                </tr>
+                            ))
+                        }</tbody
+                    >
+                </table>
+            </Panel>
+            <Panel title="相互リンク" heading="h2">
+                <div class="reciprocal-link-info">
+                    <InfoBox type="info">
+                        <p class="reciprocal-info-header">相互リンク募集中</p>
+                        <p class="reciprocal-info-text">ツイッターのDMにて募集しています。</p>
+                    </InfoBox>
+                    <div class="link-box">
+                        <a
+                            class="link-text"
+                            rel="noreferrer"
+                            target="_blank"
+                            href="https://x.com/messages/compose?recipient_id=1353236043353313282&text=%E7%9B%B8%E4%BA%92%E3%83%AA%E3%83%B3%E3%82%AF%E3%81%97%E3%81%BE%E3%81%9B%E3%82%93%E3%81%8B%EF%BC%9F%0A%0A%E3%82%B5%E3%82%A4%E3%83%88%E5%90%8D%E3%80%80%E3%80%80%E3%80%80%EF%BC%9A%EF%BC%88%E4%BE%8B%EF%BC%9A%E4%B8%BC%E7%8C%AB%E3%81%AE%E3%82%A6%E3%82%A7%E3%83%96%E3%82%B5%E3%82%A4%E3%83%88%EF%BC%89%0AURL%E3%80%80%E3%80%80%E3%80%80%E3%80%80%E3%80%80%EF%BC%9A%EF%BC%88%E4%BE%8B%EF%BC%9Ahttps%3A%2F%2Fdonneko.net%2F%EF%BC%89%0A%E3%83%90%E3%83%8A%E3%83%BC%E3%81%AEURL%E3%80%80%EF%BC%9A%EF%BC%88%E4%BE%8B%EF%BC%9Ahttps%3A%2F%2Fdonneko.net%2Fimg%2Fbanner.png%EF%BC%89"
+                            >DMを送る</a
+                        >
+                    </div>
+                    <div class="details">
+                        <Detail title="このサイトのバナー">
+                            <img src="/banner.png" />
+                        </Detail>
+                        <Detail title="相互リンクの見え方">
+                            <div class="reciprocal-links-box">
+                                <RLink
+                                    label="丼猫のウェブサイト"
+                                    href="https://www.donneko.net/"
+                                    image="../favicon.png"
+                                />
+                                <RLink
+                                    label="丼猫のウェブサイト"
+                                    href="https://www.donneko.net/"
+                                    image="../banner.png"
+                                />
+                                <RLink
+                                    label="丼猫のウェブサイト"
+                                    href="https://www.donneko.net/"
+                                    image="../banner.png"
+                                />
+                                <RLink
+                                    label="RΛLINE"
+                                    href="https://r4line.donneko.net/"
+                                    image="https://r4line.donneko.net/src/media/img/logo.png"
+                                />
+                                <RLink
+                                    label="RΛLINE"
+                                    href="https://r4line.donneko.net/"
+                                    image="https://r4line.donneko.net/src/media/img/logo.png"
+                                />
+                                <RLink
+                                    label="RΛLINE"
+                                    href="https://r4line.donneko.net/"
+                                    image="https://r4line.donneko.net/src/media/img/logo.png"
+                                />
+                            </div>
+                        </Detail>
+                    </div>
+                </div>
+
+                <div class="reciprocal-links-box"></div>
+            </Panel>
+        </div>
     </div>
 </Layout>
+<style>
+    .panels {
+        display: flex;
+        flex-direction: column;
+        gap: 3em;
+    }
+    .details {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+    .reciprocal-link-info {
+        padding: 10px;
+        padding-bottom: 20px;
+        border-bottom: 1px #000 solid;
+    }
+    .reciprocal-links-box {
+        display: grid;
+        gap: 0.5em;
+        grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+        padding: 10px;
+    }
+    .reciprocal-info-header {
+        font-weight: normal;
+        margin: 0;
+        font-size: 1.5em;
+        margin-bottom: 0.2em;
+    }
+    .reciprocal-info-text {
+        margin: 0;
+        margin-bottom: 2px;
+    }
+    .link-box {
+        margin: 1em;
+        display: block;
+        text-align: center;
+        box-sizing: border-box;
+    }
+    .link-text {
+        display: inline-block;
+        padding: 0.2em 1em;
+        background-color: #e0e0e0;
+        border: 3px outset #717171;
+    }
+
+    .link-text::after {
+        content: " ↗";
+        font-size: 0.8em;
+    }
+</style>
