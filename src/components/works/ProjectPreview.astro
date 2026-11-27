@@ -19,7 +19,7 @@ const { title, year, status, description, technologies, features, links } = work
 ---
 
 <article class="project-summary" data-preview-work={work.id}>
-    <WorkMedia media={workMainMedia(work)} title={title} />
+    <WorkMedia media={workMainMedia(work)} title={title} sizes="(min-width: 1000px) 560px, 100vw" />
     <div class="project-summary-content">
         <p class="work-eyebrow">{workCategoryLabel(work)}{year ? ` / ${year}年` : ""}</p>
         <h4>{title}</h4>

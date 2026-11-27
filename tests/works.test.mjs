@@ -23,6 +23,7 @@ async function fixture(t) {
     const root = await realpath(await mkdtemp(join(tmpdir(), "donneko-works-test-")));
     t.after(() => rm(root, { recursive: true, force: true }));
     await cp(join(project, "src"), join(root, "src"), { recursive: true });
+    await cp(join(project, "public"), join(root, "public"), { recursive: true });
     await mkdir(join(root, "src/content/blog"), { recursive: true });
     await cp(join(project, "tsconfig.json"), join(root, "tsconfig.json"));
     await cp(join(project, "package.json"), join(root, "package.json"));
@@ -70,6 +71,97 @@ const featuredLinks = (source) =>
     [...source.matchAll(/<a class="featured-card" href="([^"]+)"/g)].map((match) => match[1]);
 const escapeHtml = (text) =>
     text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+
+test("OGP・画像サイトマップは実在する公開画像だけを使い、重複・動画を除外する", async (t) => {
+    const root = await fixture(t);
+    await rm(join(root, "src/content/works"), { recursive: true });
+    await mkdir(join(root, "src/content/works"));
+    await mkdir(join(root, "public/works/seo"), { recursive: true });
+    await cp(
+        join(project, "public/works/tyoi-server/image-01.png"),
+        join(root, "public/works/seo/a&b.png")
+    );
+    await addWork(root, "alpha", {
+        title: "作品 <テスト> & OGP",
+        thumbnail: "/works/seo/a&b.png",
+        thumbnailAlt: "画像の説明",
+        gallery: [
+            { src: "/works/seo/a&b.png?download=1" },
+            { src: "/works/missing.png" },
+            { type: "video", src: "/works/arduino-traffic-light/video-01.mp4" },
+            { type: "image", src: "/works/arduino-traffic-light/video-01.mp4" },
+            { src: "https://example.com/unverified.png" },
+        ],
+    });
+    await addWork(root, "beta", { thumbnail: "/works/seo/a&b.png" });
+    await addWork(root, "missing", { thumbnail: "/works/missing.png" });
+    await addWork(root, "draft-work", {
+        draft: true,
+        thumbnail: "/works/tyoi-server/image-02.jpg",
+    });
+    await writeFile(
+        join(root, "src/content/blog/seo-post.md"),
+        '---\ntitle: "ブログOGP"\ndescription: "記事の概要"\npubDate: 2026-01-01\ncategory: development\nogImage: /works/seo/a&b.png\nogImageAlt: "記事画像"\n---\n'
+    );
+    build(root, "--base", "/example");
+    const page = await html(root, "alpha");
+    for (const property of ["title", "description", "url", "type", "image"]) {
+        assert.equal([...page.matchAll(new RegExp(`property="og:${property}"`, "g"))].length, 1);
+    }
+    assert.match(
+        page,
+        /property="og:image" content="https:\/\/donneko.net\/example\/works\/seo\/a&amp;b.png"/
+    );
+    assert.match(page, /property="og:image:alt" content="画像の説明"/);
+    assert.match(page, /name="twitter:card" content="summary_large_image"/);
+    const missing = await html(root, "missing");
+    assert.doesNotMatch(missing, /property="og:image"/);
+    assert.match(missing, /name="twitter:card" content="summary"/);
+    const sitemap = await readFile(join(root, "dist/sitemap-images.xml"), "utf8");
+    assert.equal([...sitemap.matchAll(/<image:loc>/g)].length, 1);
+    assert.match(sitemap, /xmlns:image="http:\/\/www.google.com\/schemas\/sitemap-image\/1.1"/);
+    assert.match(
+        sitemap,
+        /<image:loc>https:\/\/donneko.net\/example\/works\/seo\/a&amp;b.png<\/image:loc>/
+    );
+    assert.doesNotMatch(sitemap, /draft-work|image-02.jpg|missing|video-01|unverified|download=1/);
+    const blog = await readFile(join(root, "dist/blog/seo-post/index.html"), "utf8");
+    assert.match(blog, /property="og:type" content="article"/);
+    assert.match(blog, /property="og:image:alt" content="記事画像"/);
+    assert.match(
+        blog,
+        /property="og:image" content="https:\/\/donneko.net\/example\/works\/seo\/a&amp;b.png"/
+    );
+    const error = await readFile(join(root, "dist/404.html"), "utf8");
+    assert.doesNotMatch(error, /property="og:|name="twitter:card"|rel="canonical"/);
+});
+
+test("共通OGP画像は配置された場合だけ使用し、最適化後も元画像へのリンクを保つ", async (t) => {
+    const root = await fixture(t);
+    await mkdir(join(root, "public/ogp"), { recursive: true });
+    await cp(
+        join(project, "public/works/tyoi-server/image-01.png"),
+        join(root, "public/ogp/default.png")
+    );
+    build(root);
+    const home = await readFile(join(root, "dist/index.html"), "utf8");
+    assert.match(home, /property="og:image" content="https:\/\/donneko.net\/ogp\/default.png"/);
+    const page = await html(root, "onigiri-illustration");
+    assert.match(page, /href="\/works\/onigiri-illustration\/image-01.png"[^>]*data-work-lightbox/);
+    assert.match(page, /srcset="[^"]+160w, [^"]+480w, [^"]+960w, [^"]+1600w"/);
+    assert.match(page, /width="960" height="679"/);
+    assert.match(page, /loading="eager" fetchpriority="high"/);
+    const imageSrc = page.match(/<img[^>]*src="([^"]+)"/)?.[1];
+    assert.ok(imageSrc?.startsWith("/_astro/"));
+    assert.ok(page.includes(`property="og:image" content="https://donneko.net${imageSrc}"`));
+    assert.deepEqual(
+        await readFile(join(root, "dist/works/onigiri-illustration/image-01.png")),
+        await readFile(join(project, "public/works/onigiri-illustration/image-01.png"))
+    );
+    const index = await html(root);
+    assert.match(index, /sizes="\(min-width: 1000px\) 64px, 76px"/);
+    assert.match(index, /loading="lazy"/);
+});
 
 test("全作品のメタ情報・メディア・リンクを静的ページに保持する", async (t) => {
     const root = await fixture(t);
@@ -238,7 +330,11 @@ test("Featured順序と上限・下書き除外・省略値・Markdown・公開B
     const base = await html(root, "body");
     assert.match(base, /href="\/example\/works\/"/);
     assert.match(base, /href="\/example\/works\/plain\/"/);
-    assert.match(base, /src="\/example\/works\/tyoi-server\/image-01\.png"/);
+    assert.match(
+        base,
+        /href="\/example\/works\/tyoi-server\/image-01\.png"[^>]*data-work-lightbox/
+    );
+    assert.match(base, /src="\/example\/_astro\/[^"]+\.png"/);
 });
 
 test("公開作品0件でもFeaturedと一覧・詳細を安全に生成する", async (t) => {

@@ -1,0 +1,81 @@
+---
+interface Props {
+    title: string;
+}
+const { title } = Astro.props;
+---
+
+<div>
+    <details class="info-detail">
+        <summary class="info-detail-title">
+            <span class="info-detail-title-text">{title}</span>
+            <span class="info-detail-title-icon">⇒</span>
+        </summary>
+        <div class="info-detail-body">
+            <slot />
+        </div>
+    </details>
+    <div class="info-detail-fake">
+        <div class="info-detail-fake-box"></div>
+    </div>
+</div>
+
+<style>
+    .info-detail {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px double #111;
+        padding: 1px;
+        background: #fff;
+        box-shadow: 3px 3px #0003;
+    }
+
+    .info-detail:not(:open) {
+        border-bottom: none;
+    }
+    .info-detail-fake {
+        display: block;
+        width: 100%;
+
+        box-sizing: border-box;
+        border: 1px double #111;
+        border-top: none;
+        padding: 1px;
+        box-shadow: 3px 3px #0003;
+        background: #fff;
+    }
+    .info-detail:open + .info-detail-fake {
+        display: none;
+    }
+    .info-detail-fake-box {
+        height: 0.4em;
+        background: #fff;
+    }
+
+    .info-detail-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.2em 0.5em;
+        background: linear-gradient(#141e6b, #23b 10%, #141e6b 90%);
+        color: #fff;
+        border-bottom: #ffffffa0 1px solid;
+        cursor: pointer;
+    }
+    .info-detail-title-text {
+        display: block;
+    }
+    .info-detail-title-icon {
+        display: block;
+        height: 1em;
+        aspect-ratio: 1 / 1;
+        transform: rotate(0deg);
+        transition: transform 0.2s ease-in-out;
+    }
+    .info-detail:open .info-detail-title-icon {
+        transform: rotate(90deg);
+    }
+    .info-detail-body {
+        overflow: hidden;
+    }
+</style>

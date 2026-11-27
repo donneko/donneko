@@ -1,6 +1,8 @@
 ---
 title: "ブログ記事のタイトル"
 description: "記事の内容が伝わる短い概要に書き換えてください。"
+# ogImage: /blog/my-first-post/cover.png
+# ogImageAlt: "記事の代表画像の説明"
 # 公開日を確認して書き換えてください。日付だけで予約投稿にはなりません。
 pubDate: 2026-11-10
 # updatedDate: 2026-11-11

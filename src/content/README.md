@@ -47,6 +47,8 @@ cp src/content/_templates/works.md src/content/works/my-project.md
 | ------------- | -------- | ---- | ---------- | --------------------------------------------------- |
 | `title`       | string   | 必須 | なし       | 空でない記事タイトル。ページの `h1` とtitleに使用。 |
 | `description` | string   | 必須 | なし       | 空でない概要。一覧・meta descriptionに使用。        |
+| `ogImage`     | string   | 任意 | 共通画像   | `public/` 内の画像の公開パス。例：`/blog/my-post/cover.png`。 |
+| `ogImageAlt`  | string   | 任意 | ページタイトル | OGP画像の説明。画像未配置時は画像タグを出力しません。 |
 | `pubDate`     | date     | 必須 | なし       | 公開日。`YYYY-MM-DD` を推奨。新しい順に並びます。   |
 | `updatedDate` | date     | 任意 | 表示しない | 更新した場合の日付。                                |
 | `category`    | string   | 必須 | なし       | 下表の英小文字の値を1つ指定。                       |

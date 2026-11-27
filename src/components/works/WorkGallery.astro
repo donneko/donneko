@@ -16,7 +16,11 @@ const { items, title } = Astro.props;
             <h2 id="work-gallery-heading">ギャラリー</h2>
             <div class="work-gallery">
                 {items.map((media) => (
-                    <WorkMedia media={media} title={title} />
+                    <WorkMedia
+                        media={media}
+                        title={title}
+                        sizes="(min-width: 700px) 360px, calc(100vw - 80px)"
+                    />
                 ))}
             </div>
         </section>

@@ -1,20 +1,31 @@
 ---
 import Navigation from "../components/nav.astro";
 import "../styles/global.css";
+import { imageAttributes, socialImage } from "../lib/images";
 
 interface Props {
     title: string;
     description?: string;
     noindex?: boolean;
+    ogImage?: string;
+    ogImageAlt?: string;
+    ogType?: "website" | "article";
 }
 
 const {
     title,
     description = "丼猫の作品や日記をまとめた個人サイトです。",
     noindex = false,
+    ogImage,
+    ogImageAlt,
+    ogType = "website",
 } = Astro.props;
 const pageTitle = title ? `${title} | 丼猫のウェブサイト` : "丼猫のウェブサイト";
 const canonicalURL = new URL(`${Astro.url.pathname.replace(/\/+$/, "")}/`, Astro.site);
+const pageImage = socialImage(ogImage);
+const shareImage = pageImage ?? socialImage("/ogp/default.png");
+const shareAttributes = shareImage ? await imageAttributes(shareImage.path) : undefined;
+const shareImageURL = shareAttributes ? new URL(shareAttributes.src, Astro.site).href : undefined;
 ---
 
 <!doctype html>
@@ -28,6 +39,31 @@ const canonicalURL = new URL(`${Astro.url.pathname.replace(/\/+$/, "")}/`, Astro
                 <meta name="robots" content="noindex, follow" />
             ) : (
                 <link rel="canonical" href={canonicalURL.href} />
+            )
+        }
+        {
+            !noindex && (
+                <>
+                    <meta property="og:title" content={pageTitle} />
+                    <meta property="og:description" content={description} />
+                    <meta property="og:url" content={canonicalURL.href} />
+                    <meta property="og:type" content={ogType} />
+                    <meta
+                        name="twitter:card"
+                        content={shareImageURL ? "summary_large_image" : "summary"}
+                    />
+                    {shareImageURL && shareImage && (
+                        <>
+                            <meta property="og:image" content={shareImageURL} />
+                            <meta property="og:image:width" content={shareAttributes?.width} />
+                            <meta property="og:image:height" content={shareAttributes?.height} />
+                            <meta
+                                property="og:image:alt"
+                                content={pageImage ? ogImageAlt || pageTitle : "丼猫のウェブサイト"}
+                            />
+                        </>
+                    )}
+                </>
             )
         }
         <link rel="icon" href="/favicon.png" type="image/png" sizes="16x16" />
